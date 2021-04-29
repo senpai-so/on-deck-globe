@@ -1,0 +1,34 @@
+.heroSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: calc(min(800px, var(--max-width)));
+  text-align: center;
+}
+
+.intro h1 {
+  font-size: 40px;
+}
+
+.intro h2 {
+  font-weight: 400;
+  max-width: calc(min(610px, var(--max-width)));
+  margin: 0.5em 0 2em;
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
