@@ -4,6 +4,7 @@ import { User } from 'lib/types'
 import { getUsers } from 'lib/get-users'
 import { Layout } from 'components/Layout/Layout'
 import { QueryParamProvider } from 'components/QueryParamProvider/QueryParamProvider'
+import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualization'
 import { Globe } from 'state/globe'
 
 import styles from 'styles/index.module.css'
@@ -32,5 +33,19 @@ export default function HomePage({ users }: { users: User[] }) {
 }
 
 function GlobePage({ users }: { users: User[] }) {
-  return <div>TODO</div>
+  const { setUsers } = Globe.useContainer()
+  const [hasMounted, setHasMounted] = React.useState(false)
+  React.useEffect(() => {
+    setHasMounted(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (!users?.length) return
+
+    setUsers(users)
+  }, [users, setUsers])
+
+  return (
+    <div className={styles.page}>{hasMounted && <GlobeVisualization />}</div>
+  )
 }
