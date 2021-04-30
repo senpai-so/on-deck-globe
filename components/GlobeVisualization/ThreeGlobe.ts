@@ -5,8 +5,6 @@ import { User } from 'lib/types'
 import * as utils from './utils'
 import * as shaders from './shaders'
 import { Particle } from './particle'
-import { velocityPerFrame } from 'popmotion'
-import { randomFill } from 'node:crypto'
 
 const PI_HALF = Math.PI / 2
 
@@ -151,7 +149,7 @@ export class ThreeGlobe {
     // user particles
     const numUsers = users.length
     const numParticlesPerUser = 30
-    const numParticles = numUsers * numParticlesPerUser
+    // const numParticles = numUsers * numParticlesPerUser
     const vertices = []
     const colors = []
     const sizes = []
@@ -214,7 +212,7 @@ export class ThreeGlobe {
         particle.radius = particle.radius0 + 2
         particle.phi = particle.phi0
         particle.theta = particle.theta0
-        particle.size = 7.5
+        particle.size = 20
         return
       }
 
@@ -229,7 +227,7 @@ export class ThreeGlobe {
         random.float(-0.000001, 0.000001),
         random.float(0.000001, 0.0001)
       ]
-      particle.size = random.float(2)
+      particle.size = random.float(1, 10)
 
       const r = particle.radius0 + random.float(0, 2)
       const phi = particle.phi0 + random.float(-0.001, 0.001) // horizontal
@@ -279,7 +277,7 @@ export class ThreeGlobe {
           vertices[3 * i + 1] = y
           vertices[3 * i + 2] = z
 
-          // sizes[i] = particle.size * (Math.min(100, particle.age) / 100)
+          sizes[i] = particle.size * (Math.min(25, particle.age) / 25)
 
           if (particle.age-- <= 0) {
             console.log(particle.velocity)
@@ -289,7 +287,7 @@ export class ThreeGlobe {
       }
 
       geometry.attributes.position.needsUpdate = true
-      // geometry.attributes.size.needsUpdate = true
+      geometry.attributes.size.needsUpdate = true
     }
 
     this._updateParticles = updateParticles
