@@ -1,81 +1,12 @@
 import * as THREE from 'three'
+import random from 'random'
 
 import { User } from 'lib/types'
 import * as utils from './utils'
-
-const shaders = {
-  earth: {
-    uniforms: {
-      globe: { type: 't', value: null }
-    },
-    vertexShader: `
-      varying vec3 vNormal;
-      varying vec2 vUv;
-      void main() {
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        vNormal = normalize(normalMatrix * normal);
-        vUv = uv;
-      }
-    `,
-    fragmentShader: `
-      uniform sampler2D globe;
-      varying vec3 vNormal;
-      varying vec2 vUv;
-      void main() {
-        vec3 diffuse = texture2D(globe, vUv).xyz;
-        float intensity = 1.05 - dot(vNormal, vec3(0.0, 0.0, 1.0));
-        vec3 atmosphere = vec3(1.0, 1.0, 1.0) * pow(intensity, 3.0);
-        gl_FragColor = vec4(diffuse + atmosphere, 1.0);
-      }
-    `
-  },
-  weather: {
-    uniforms: {
-      weather: { type: 't', value: null }
-    },
-    vertexShader: `
-      varying vec3 vNormal;
-      varying vec2 vUv;
-      void main() {
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        vNormal = normalize(normalMatrix * normal);
-        vUv = uv;
-      }
-    `,
-    fragmentShader: `
-      uniform sampler2D weather;
-      varying vec3 vNormal;
-      varying vec2 vUv;
-      void main() {
-        vec3 diffuse = texture2D(weather, vUv).xyz;
-        float intensity = pow(dot(vNormal, vec3(0, 0, 1.0)), 2.0);
-        float avg = (diffuse.x+diffuse.y+diffuse.z)/3.0;
-        if (avg < 0.05 || intensity < 0.2) {
-          discard;
-        }
-
-        gl_FragColor = vec4(diffuse, intensity);
-      }
-    `
-  },
-  atmosphere: {
-    uniforms: {},
-    vertexShader: `
-      varying vec3 vNormal;
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vNormal;
-      void main() {
-        float intensity = pow(0.8 - dot(vNormal, vec3(0, 0, 1.0)), 8.0);
-        gl_FragColor = vec4(0.5, 0.5, 0.5, 0.2) * intensity;
-      }
-    `
-  }
-}
+import * as shaders from './shaders'
+import { Particle } from './particle'
+import { velocityPerFrame } from 'popmotion'
+import { randomFill } from 'node:crypto'
 
 const PI_HALF = Math.PI / 2
 
@@ -100,6 +31,8 @@ export class ThreeGlobe {
   _renderer: THREE.WebGLRenderer
   _canvas: HTMLCanvasElement
   _globeMesh: THREE.Mesh
+  _particles: THREE.Points
+
   _rafHandle?: number
 
   _mouse?: Vec2
@@ -112,8 +45,11 @@ export class ThreeGlobe {
   _distanceTarget = 100000
   _curZoomSpeed = 0
   _mouseDown = false
+  _radius = 200
 
   _users: User[]
+
+  _updateParticles: () => void
 
   constructor({
     canvas,
@@ -138,16 +74,14 @@ export class ThreeGlobe {
 
     this._scene = new THREE.Scene()
 
-    const geometry = new THREE.SphereGeometry(200, 120, 120)
+    const geometry = new THREE.SphereGeometry(this._radius, 120, 120)
     const textureLoader = new THREE.TextureLoader()
 
     {
       // base globe
       const shader = shaders.earth
       const uniforms = THREE.UniformsUtils.clone(shader.uniforms)
-
-      const worldImage = '/world2-opt.jpg'
-      uniforms.globe.value = textureLoader.load(worldImage)
+      uniforms.globe.value = textureLoader.load('/world2-opt.jpg')
 
       const material = new THREE.ShaderMaterial({
         uniforms: uniforms,
@@ -164,10 +98,8 @@ export class ThreeGlobe {
     {
       // weather
       const shader = shaders.weather
-
-      const weatherImage = '/weather-opt.jpg'
       const uniforms = THREE.UniformsUtils.clone(shader.uniforms)
-      uniforms.weather.value = textureLoader.load(weatherImage)
+      uniforms.weather.value = textureLoader.load('/weather-opt.jpg')
 
       const material = new THREE.ShaderMaterial({
         uniforms: uniforms,
@@ -186,7 +118,6 @@ export class ThreeGlobe {
     {
       // atmosphere
       const shader = shaders.atmosphere
-
       const uniforms = THREE.UniformsUtils.clone(shader.uniforms)
 
       const material = new THREE.ShaderMaterial({
@@ -216,6 +147,189 @@ export class ThreeGlobe {
 
   setUsers(users: User[]) {
     this._users = users
+
+    // user particles
+    const numUsers = users.length
+    const numParticlesPerUser = 30
+    const numParticles = numUsers * numParticlesPerUser
+    const vertices = []
+    const colors = []
+    const sizes = []
+    const particles = []
+
+    // position
+    // velocity
+    // age
+    // size
+    // color
+
+    console.log('addUsers', numUsers, numParticlesPerUser)
+    const color = new THREE.Color()
+
+    for (let i = 0; i < numUsers; ++i) {
+      const user = users[i]
+      const { lat, lng } = user
+      if (!(lat && lng)) {
+        continue
+      }
+
+      const { phi, theta } = utils.latLngToSpherical({ lat, lng })
+
+      for (let j = 0; j < numParticlesPerUser; ++j) {
+        const particle = new Particle()
+        particle.main = j === 0
+        particle.lat = lat
+        particle.lng = lng
+        particle.phi0 = phi
+        particle.theta0 = theta
+        particle.radius0 = this._radius
+        particle.userId = user.id
+        particle.userIndex = i
+        particles.push(particle)
+
+        spawnParticle(particles.length - 1)
+
+        const x =
+          particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
+        const y = particle.radius * Math.cos(particle.phi)
+        const z =
+          particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
+
+        vertices.push(x, y, z)
+
+        color.setHSL(
+          (particle.lng + random.float(-5, 5) + 180) / 360,
+          1.0,
+          0.75
+        )
+        colors.push(color.r, color.g, color.b)
+
+        sizes.push(particle.size)
+      }
+    }
+
+    function spawnParticle(index) {
+      const particle = particles[index]
+      if (particle.main) {
+        particle.radius = particle.radius0 + 2
+        particle.phi = particle.phi0
+        particle.theta = particle.theta0
+        particle.size = 7.5
+        return
+      }
+
+      particle.age = random.int(80, 200)
+      particle.acceleration = [
+        random.float(-0.0000001, 0.0000001),
+        random.float(-0.0000001, 0.0000001),
+        random.float(0.000000001, 0.000001)
+      ]
+      particle.velocity = [
+        random.float(-0.000001, 0.000001),
+        random.float(-0.000001, 0.000001),
+        random.float(0.000001, 0.0001)
+      ]
+      particle.size = random.float(2)
+
+      const r = particle.radius0 + random.float(0, 2)
+      const phi = particle.phi0 + random.float(-0.001, 0.001) // horizontal
+      const theta = particle.theta0 + random.float(-0.001, 0.001) // vertical
+      particle.phi = phi
+      particle.theta = theta
+      particle.radius = r
+    }
+
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(vertices, 3).setUsage(
+        THREE.DynamicDrawUsage
+      )
+    )
+
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1))
+
+    function updateParticles() {
+      const vertices = geometry.attributes.position.array as Float32Array
+      const sizes = geometry.attributes.size.array as Float32Array
+
+      for (let i = 0; i < particles.length; ++i) {
+        const particle = particles[i]
+        if (!particle.main) {
+          particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
+          particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
+          particle.acceleration[2] += random.float(-0.00000001, 0.000001)
+
+          particle.velocity[0] += particle.acceleration[0]
+          particle.velocity[1] += particle.acceleration[1]
+          particle.velocity[2] += particle.acceleration[2]
+
+          particle.phi += particle.velocity[0]
+          particle.theta += particle.velocity[1]
+          particle.radius += particle.velocity[2]
+
+          const x =
+            particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
+          const y = particle.radius * Math.cos(particle.phi)
+          const z =
+            particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
+
+          vertices[3 * i + 0] = x
+          vertices[3 * i + 1] = y
+          vertices[3 * i + 2] = z
+
+          // sizes[i] = particle.size * (Math.min(100, particle.age) / 100)
+
+          if (particle.age-- <= 0) {
+            console.log(particle.velocity)
+            spawnParticle(i)
+          }
+        }
+      }
+
+      geometry.attributes.position.needsUpdate = true
+      // geometry.attributes.size.needsUpdate = true
+    }
+
+    this._updateParticles = updateParticles
+
+    const sprite = new THREE.TextureLoader().load('/disc.png')
+    // const material = new THREE.PointsMaterial({
+    //   size: 10,
+    //   map: sprite,
+    //   color: new THREE.Color('lightblue'),
+    //   blending: THREE.AdditiveBlending,
+    //   depthTest: true,
+    //   depthWrite: false,
+    //   transparent: true,
+    //   sizeAttenuation: true,
+    //   visible: true
+    // })
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        tSprite: {
+          value: sprite
+        }
+      },
+      vertexShader: shaders.particles.vertexShader,
+      fragmentShader: shaders.particles.fragmentShader,
+      blending: THREE.AdditiveBlending,
+      depthTest: true,
+      depthWrite: false,
+      transparent: true,
+      vertexColors: true
+    })
+
+    const points = new THREE.Points(geometry, material)
+
+    if (this._particles) {
+      this._scene.remove(this._particles)
+    }
+
+    this._particles = points
+    this._scene.add(this._particles)
   }
 
   resize = (width: number, height: number) => {
@@ -232,6 +346,10 @@ export class ThreeGlobe {
   }
 
   animate() {
+    if (this._updateParticles) {
+      this._updateParticles()
+    }
+
     this.render()
     this._rafHandle = requestAnimationFrame(this.animate.bind(this))
   }
