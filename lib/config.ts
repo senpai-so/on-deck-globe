@@ -20,11 +20,6 @@ export const fathomConfig = fathomId
     }
   : undefined
 
-export const sessionSecret = getEnv('SESSION_SECRET', null)
-export const sessionCookieName = getEnv('SESSION_COOKIE_NAME', 'on-deck-globe')
-
-export const imageCDNHost = 'https://ssfy.io'
-
 // ----------------------------------------------------------------------------
 
 export function getEnv(
