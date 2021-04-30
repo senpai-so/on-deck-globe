@@ -48,9 +48,13 @@ const shaders = {
       varying vec2 vUv;
       void main() {
         vec3 diffuse = texture2D(weather, vUv).xyz;
-        float intensity = dot(vNormal, vec3(0.0, 0.0, 1.0));
-        vec3 atmosphere = vec3(1.0, 1.0, 1.0) * pow(intensity, 3.0);
-        gl_FragColor = vec4(diffuse, clamp(atmosphere, 0.0, 1.0));
+        float intensity = pow(dot(vNormal, vec3(0, 0, 1.0)), 2.0);
+        float avg = (diffuse.x+diffuse.y+diffuse.z)/3.0;
+        if (avg < 0.05 || intensity < 0.2) {
+          discard;
+        }
+
+        gl_FragColor = vec4(diffuse, intensity);
       }
     `
   },
@@ -175,7 +179,7 @@ export class ThreeGlobe {
       })
 
       const mesh = new THREE.Mesh(geometry, material)
-      mesh.scale.set(1.001, 1.001, 1.001)
+      mesh.scale.set(1.01, 1.01, 1.01)
       this._scene.add(mesh)
     }
 
