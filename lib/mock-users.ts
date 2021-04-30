@@ -4,24 +4,31 @@ const users: User[] = [
   {
     id: '4391',
     isPublic: true,
+    lng: -74.016915901860472,
+    lat: 40.69555921429896,
     fellow: {
+      isMe: true,
       id: '4391',
       name: 'Travis Fischer',
       legacyReferralId: 'Travis Fischer',
       imageUrl:
         'http://res.cloudinary.com/beondeck/image/upload/v1/fellows_profile_pictures/bklctwx88esdc9gloohw',
+      twitterId: 'transitive_bs',
+      linkedinId: 'fisch2',
+      personalUrl: 'https://transitivebullsh.it',
+      dmsOpen: true,
+      slackIntro: null,
+      oneLiner: 'Technical Founder exploring the Passion Economy',
       bio:
         "Technical founder exploring the passion economy\n\n• Wisconsin => Brown '09 => Seattle => NY => Bangkok => NY\n• Ex Facebook, Microsoft, Pixar\n• Founded several companies w/ 2 small exits (most recently Saasify, a for Shopify API-based SaaS)\n\nWorking on:\n• Researching and writing about the passion economy & future of work\n• Open source Notion => Site\n• Open source Clubhouse social graph crawler\n• Open source JS / TS / React / everything",
-      visibility: 'ondeck',
+      doingNext: '',
+      calendlyUrl: 'calendly.com/travis-fischer',
+      updatedAt: '2021-04-18T03:05:13.878Z',
       cohorts: [
         {
           cohort: {
-            id: '436',
-            active: true,
-            name: 'ODF9',
-            programId: 'ODF',
-            createdAt: '2021-04-05T20:03:35.976Z',
-            updatedAt: '2021-04-05T20:03:35.976Z'
+            value: '436',
+            label: 'ODF9'
           }
         }
       ],
@@ -39,6 +46,52 @@ const users: User[] = [
           }
         }
       ],
+      locations: [
+        {
+          value: '7',
+          label: 'New York, United States'
+        }
+      ],
+      skills: [
+        {
+          value: '3169',
+          label: 'Software Engineering'
+        },
+        {
+          value: '3165',
+          label: 'Product Development / Product Strategy'
+        },
+        {
+          value: '3159',
+          label: 'Generalist'
+        }
+      ],
+      expertises: [
+        {
+          value: '26',
+          label: 'Marketplace'
+        },
+        {
+          value: '4',
+          label: 'B2B SaaS'
+        },
+        {
+          value: '9',
+          label: 'Consumer'
+        },
+        {
+          value: '40',
+          label: 'No-Code'
+        },
+        {
+          value: '12',
+          label: 'Developer Tools'
+        },
+        {
+          value: '3067',
+          label: 'Software'
+        }
+      ],
       statuses: [
         {
           value: '3373',
@@ -52,12 +105,85 @@ const users: User[] = [
           value: '3374',
           label: 'Exploring and researching on one specific idea'
         }
-      ]
+      ],
+      objectives: [
+        {
+          value: '3227',
+          label: 'Looking for co-founder'
+        },
+        {
+          value: '3240',
+          label: 'Expand my network'
+        },
+        {
+          value: '3238',
+          label: 'Advise and support others'
+        }
+      ],
+      interests: [
+        {
+          value: '20',
+          label: 'Future of Work'
+        },
+        {
+          value: '3159',
+          label: 'Generalist'
+        },
+        {
+          value: '40',
+          label: 'No-Code'
+        },
+        {
+          value: '3169',
+          label: 'Software Engineering'
+        },
+        {
+          value: '4',
+          label: 'B2B SaaS'
+        },
+        {
+          value: '26',
+          label: 'Marketplace'
+        },
+        {
+          value: '12',
+          label: 'Developer Tools'
+        },
+        {
+          value: '3165',
+          label: 'Product Development / Product Strategy'
+        }
+      ],
+      lookingFor: [
+        {
+          value: '2012',
+          label: 'Business Development'
+        },
+        {
+          value: '1128',
+          label: 'Design'
+        },
+        {
+          value: '291',
+          label: 'Marketing'
+        },
+        {
+          value: '3092',
+          label: 'Fundraising / Investor Relations'
+        }
+      ],
+      referredBy: null,
+      fave: null,
+      writings: [],
+      investments: [],
+      projects: []
     }
   },
   {
     id: '4449',
     isPublic: true,
+    lat: 37.445292122888759,
+    lng: -122.11658310387372,
     fellow: {
       id: '4449',
       name: 'Tim Saval',
@@ -190,6 +316,8 @@ const users: User[] = [
   },
   {
     id: '4410',
+    lat: 37.760671182879882,
+    lng: -122.46830914030043,
     isPublic: true,
     fellow: {
       id: '4410',
@@ -396,6 +524,8 @@ const users: User[] = [
   {
     id: '4406',
     isPublic: true,
+    lng: 6.9500612414278091,
+    lat: 50.987189041990781,
     fellow: {
       id: '4406',
       name: 'Laszlo Schürg',

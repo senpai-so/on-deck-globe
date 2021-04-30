@@ -1,5 +1,8 @@
 import * as THREE from 'three'
 
+import { User } from 'lib/types'
+import * as utils from './utils'
+
 const shaders = {
   earth: {
     uniforms: {
@@ -106,9 +109,19 @@ export class ThreeGlobe {
   _curZoomSpeed = 0
   _mouseDown = false
 
-  constructor({ canvas }: { canvas: HTMLCanvasElement }) {
+  _users: User[]
+
+  constructor({
+    canvas,
+    users = []
+  }: {
+    canvas: HTMLCanvasElement
+    users?: User[]
+  }) {
     const width = canvas.width
     const height = canvas.height
+
+    this._users = users
 
     this._mouse = { x: 0, y: 0 }
     this._mouseOnDown = { x: 0, y: 0 }
@@ -122,6 +135,7 @@ export class ThreeGlobe {
     this._scene = new THREE.Scene()
 
     const geometry = new THREE.SphereGeometry(200, 120, 120)
+    const textureLoader = new THREE.TextureLoader()
 
     {
       // base globe
@@ -129,7 +143,7 @@ export class ThreeGlobe {
       const uniforms = THREE.UniformsUtils.clone(shader.uniforms)
 
       const worldImage = '/world2-opt.jpg'
-      uniforms.globe.value = THREE.ImageUtils.loadTexture(worldImage)
+      uniforms.globe.value = textureLoader.load(worldImage)
 
       const material = new THREE.ShaderMaterial({
         uniforms: uniforms,
@@ -149,7 +163,7 @@ export class ThreeGlobe {
 
       const weatherImage = '/weather-opt.jpg'
       const uniforms = THREE.UniformsUtils.clone(shader.uniforms)
-      uniforms.weather.value = THREE.ImageUtils.loadTexture(weatherImage)
+      uniforms.weather.value = textureLoader.load(weatherImage)
 
       const material = new THREE.ShaderMaterial({
         uniforms: uniforms,
@@ -196,6 +210,10 @@ export class ThreeGlobe {
     this.resize(width, height)
   }
 
+  setUsers(users: User[]) {
+    this._users = users
+  }
+
   resize = (width: number, height: number) => {
     this._camera.aspect = width / height
     this._camera.updateProjectionMatrix()
@@ -224,8 +242,6 @@ export class ThreeGlobe {
 
     this._targetOnDown.x = this._target.x
     this._targetOnDown.y = this._target.y
-
-    // container.style.cursor = 'move'
   }
 
   onMouseMove = (event) => {
@@ -249,7 +265,6 @@ export class ThreeGlobe {
 
   onMouseUp() {
     this._mouseDown = false
-    // container.style.cursor = 'auto'
   }
 
   onMouseOut() {
@@ -286,14 +301,16 @@ export class ThreeGlobe {
     this._rotation.y += (this._target.y - this._rotation.y) * 0.1
     this._distance += (this._distanceTarget - this._distance) * 0.3
 
-    this._camera.position.x =
-      this._distance * Math.sin(this._rotation.x) * Math.cos(this._rotation.y)
-    this._camera.position.y = this._distance * Math.sin(this._rotation.y)
-    this._camera.position.z =
-      this._distance * Math.cos(this._rotation.x) * Math.cos(this._rotation.y)
+    const cameraPos = utils.sphericalToWorld({
+      phi: this._rotation.x,
+      theta: this._rotation.y,
+      radius: this._distance
+    })
+    this._camera.position.x = cameraPos.x
+    this._camera.position.y = cameraPos.y
+    this._camera.position.z = cameraPos.z
 
     this._camera.lookAt(this._globeMesh.position)
-
     this._renderer.render(this._scene, this._camera)
   }
 }

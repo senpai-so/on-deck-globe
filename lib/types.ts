@@ -1,6 +1,8 @@
 export interface User {
   id: string
   isPublic: boolean
+  lat?: number
+  lng?: number
   fellow: Fellow
 }
 
@@ -11,9 +13,11 @@ export interface Fellow {
   oneLiner?: string
   bio?: string
   doingNext?: string
+  slackIntro?: string
   twitterId?: string
   linkedinId?: string
   personalUrl?: string
+  calendlyUrl?: string
   dmsOpen?: boolean
   needsOnboarding?: boolean
   isMe?: boolean
@@ -28,7 +32,13 @@ export interface Fellow {
   interests?: KeyValue[]
   lookingFor?: KeyValue[]
   legacyReferralId?: string
+  referredBy?: any
+  writings?: any[]
+  investments?: any[]
+  projects?: any[]
   visibility?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface Cohort {

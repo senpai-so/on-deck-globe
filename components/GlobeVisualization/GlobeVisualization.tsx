@@ -1,14 +1,14 @@
 import React from 'react'
 import { useMeasure } from 'react-use'
 
-// import { Globe } from 'state/globe'
+import { Globe } from 'state/globe'
 
 // import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator'
 import { ThreeGlobe } from './ThreeGlobe'
 import styles from './styles.module.css'
 
 export const GlobeVisualization: React.FC = () => {
-  // const { users, focusedUser, setFocusedUser } = Globe.useContainer()
+  const { users } = Globe.useContainer()
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const globeRef = React.useRef<ThreeGlobe>(null)
 
@@ -32,7 +32,11 @@ export const GlobeVisualization: React.FC = () => {
 
   React.useEffect(() => {
     globeRef.current?.resize(width, height)
-  }, [width, height])
+  }, [globeRef, width, height])
+
+  React.useEffect(() => {
+    globeRef.current?.setUsers(users)
+  }, [globeRef, users])
 
   const onMouseDown = React.useCallback(
     (event) => {
