@@ -64,7 +64,7 @@ const shaders = {
       varying vec3 vNormal;
       void main() {
         float intensity = pow(0.8 - dot(vNormal, vec3(0, 0, 1.0)), 8.0);
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 0.5) * intensity;
+        gl_FragColor = vec4(0.5, 0.5, 0.5, 0.2) * intensity;
       }
     `
   }
@@ -121,7 +121,7 @@ export class ThreeGlobe {
 
     this._scene = new THREE.Scene()
 
-    const geometry = new THREE.SphereGeometry(200, 80, 80)
+    const geometry = new THREE.SphereGeometry(200, 120, 120)
 
     {
       // base globe
@@ -161,7 +161,7 @@ export class ThreeGlobe {
       })
 
       const mesh = new THREE.Mesh(geometry, material)
-      mesh.scale.set(1.01, 1.01, 1.01)
+      mesh.scale.set(1.001, 1.001, 1.001)
       this._scene.add(mesh)
     }
 
@@ -181,7 +181,7 @@ export class ThreeGlobe {
       })
 
       const mesh = new THREE.Mesh(geometry, material)
-      mesh.scale.set(1.1, 1.1, 1.1)
+      mesh.scale.set(1.2, 1.2, 1.2)
       this._scene.add(mesh)
     }
 
@@ -257,8 +257,7 @@ export class ThreeGlobe {
   }
 
   onMouseWheel(event) {
-    event.preventDefault()
-    this._zoom(event.wheelDeltaY * 0.3)
+    this._zoom(event.nativeEvent.wheelDeltaY * 0.3)
     return false
   }
 
