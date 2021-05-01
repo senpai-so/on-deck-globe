@@ -269,7 +269,7 @@ export class ThreeGlobe {
         particle.phi = particle.phi0
         particle.theta = particle.theta0
         // TODO: this is weird...
-        particle.size = random.float(30, 50) * 15 * 50
+        particle.size = random.float(30, 50) * 15 * 70
         return
       }
 
