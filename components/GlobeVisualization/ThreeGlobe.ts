@@ -74,6 +74,7 @@ export class ThreeGlobe {
 
     this._scene = new THREE.Scene()
     this._raycaster = new THREE.Raycaster()
+    this._raycaster.params.Points.threshold = 5
 
     const geometry = new THREE.SphereGeometry(this._radius, 120, 120)
     const textureLoader = new THREE.TextureLoader()
@@ -162,11 +163,13 @@ export class ThreeGlobe {
     // size
     // color
 
-    const sprite = new THREE.TextureLoader().load('/disc.png')
+    const sprite = new THREE.TextureLoader().load('/sprite.png')
+    sprite.minFilter = THREE.LinearMipMapLinearFilter
+    sprite.magFilter = THREE.LinearMipMapLinearFilter
     // const material = new THREE.PointsMaterial({
-    //   size: 10,
+    //   size: 50,
     //   map: sprite,
-    //   color: new THREE.Color('lightblue'),
+    //   vertexColors: true,
     //   blending: THREE.AdditiveBlending,
     //   depthTest: true,
     //   depthWrite: false,
@@ -186,8 +189,11 @@ export class ThreeGlobe {
       blending: THREE.AdditiveBlending,
       depthTest: true,
       depthWrite: false,
-      transparent: true,
+      transparent: false,
       vertexColors: true
+      // polygonOffset: true,
+      // polygonOffsetFactor: -10.0,
+      // polygonOffsetUnits: -40.0
     })
 
     const color = new THREE.Color()
@@ -244,12 +250,16 @@ export class ThreeGlobe {
     )
 
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1))
+    geometry.setAttribute(
+      'size',
+      new THREE.Float32BufferAttribute(sizes, 1).setUsage(
+        THREE.DynamicDrawUsage
+      )
+    )
     particleSystem.geometry = geometry
     particleSystems.push(particleSystem)
 
     const points = new THREE.Points(particleSystem.geometry, material)
-    points.userData.userIndex = 0
     particles.add(points)
 
     function spawnParticle(particleSystem: ParticleSystem, index: number) {
@@ -258,21 +268,22 @@ export class ThreeGlobe {
         particle.radius = particle.radius0 + 2
         particle.phi = particle.phi0
         particle.theta = particle.theta0
-        particle.size = random.float(30, 50)
+        // TODO: this is weird...
+        particle.size = random.float(30, 50) * 15 * 50
         return
       }
 
-      particle.age = random.int(80, 200)
-      particle.acceleration = [
-        random.float(-0.0000001, 0.0000001),
-        random.float(-0.0000001, 0.0000001),
-        random.float(0.000000001, 0.000001)
-      ]
-      particle.velocity = [
-        random.float(-0.000001, 0.000001),
-        random.float(-0.000001, 0.000001),
-        random.float(0.000001, 0.0001)
-      ]
+      // particle.age = random.int(80, 200)
+      // particle.acceleration = [
+      //   random.float(-0.0000001, 0.0000001),
+      //   random.float(-0.0000001, 0.0000001),
+      //   random.float(0.000000001, 0.000001)
+      // ]
+      // particle.velocity = [
+      //   random.float(-0.000001, 0.000001),
+      //   random.float(-0.000001, 0.000001),
+      //   random.float(0.000001, 0.0001)
+      // ]
       particle.size = random.float(1, 10)
 
       const r = particle.radius0 + random.float(0, 2)
@@ -283,63 +294,63 @@ export class ThreeGlobe {
       particle.radius = r
     }
 
-    // function updateParticles() {
-    //   return
+    function updateParticles() {
+      for (let userIndex = 0; userIndex < particleSystems.length; ++userIndex) {
+        const particleSystem = particleSystems[userIndex]
+        // const vertices = particleSystem.geometry.attributes.position
+        //   .array as Float32Array
+        const sizes = particleSystem.geometry.attributes.size
+          .array as Float32Array
 
-    //   for (let userIndex = 0; userIndex < particleSystems.length; ++userIndex) {
-    //     const particleSystem = particleSystems[userIndex]
-    //     const isHovered = userIndex === this._hoveredUserIndex
-    //     const vertices = particleSystem.geometry.attributes.position
-    //       .array as Float32Array
-    //     const sizes = particleSystem.geometry.attributes.size
-    //       .array as Float32Array
+        for (let i = 0; i < particleSystem.particles.length; ++i) {
+          const isHovered = i === this._hoveredUserIndex
+          const particle = particleSystem.particles[i]
 
-    //     for (let i = 0; i < particleSystem.particles.length; ++i) {
-    //       const particle = particleSystem.particles[i]
-    //       if (!particle.main) {
-    //         particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
-    //         particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
-    //         particle.acceleration[2] += random.float(-0.00000001, 0.000001)
+          if (particle.main) {
+            // particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
+            // particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
+            // particle.acceleration[2] += random.float(-0.00000001, 0.000001)
 
-    //         particle.velocity[0] += particle.acceleration[0]
-    //         particle.velocity[1] += particle.acceleration[1]
-    //         particle.velocity[2] += particle.acceleration[2]
+            // particle.velocity[0] += particle.acceleration[0]
+            // particle.velocity[1] += particle.acceleration[1]
+            // particle.velocity[2] += particle.acceleration[2]
 
-    //         particle.phi += particle.velocity[0]
-    //         particle.theta += particle.velocity[1]
-    //         particle.radius += particle.velocity[2]
+            // particle.phi += particle.velocity[0]
+            // particle.theta += particle.velocity[1]
+            // particle.radius += particle.velocity[2]
 
-    //         const x =
-    //           particle.radius *
-    //           Math.sin(particle.phi) *
-    //           Math.cos(particle.theta)
-    //         const y = particle.radius * Math.cos(particle.phi)
-    //         const z =
-    //           particle.radius *
-    //           Math.sin(particle.phi) *
-    //           Math.sin(particle.theta)
+            // particle.radius = particle.radius0 + random.float(-1, 2)
+            // const x =
+            //   particle.radius *
+            //   Math.sin(particle.phi) *
+            //   Math.cos(particle.theta)
+            // const y = particle.radius * Math.cos(particle.phi)
+            // const z =
+            //   particle.radius *
+            //   Math.sin(particle.phi) *
+            //   Math.sin(particle.theta)
 
-    //         vertices[3 * i + 0] = x
-    //         vertices[3 * i + 1] = y
-    //         vertices[3 * i + 2] = z
+            // vertices[3 * i + 0] = x
+            // vertices[3 * i + 1] = y
+            // vertices[3 * i + 2] = z
 
-    //         sizes[i] =
-    //           particle.size *
-    //           (Math.min(25, particle.age) / 25) *
-    //           (isHovered ? 10 : 1)
+            sizes[i] =
+              particle.size *
+              // (Math.min(25, particle.age) / 25) *
+              (isHovered ? 2 : 1)
 
-    //         if (particle.age-- <= 0) {
-    //           spawnParticle(particleSystem, i)
-    //         }
-    //       }
-    //     }
+            // if (particle.age-- <= 0) {
+            //   spawnParticle(particleSystem, i)
+            // }
+          }
+        }
 
-    //     particleSystem.geometry.attributes.position.needsUpdate = true
-    //     particleSystem.geometry.attributes.size.needsUpdate = true
-    //   }
-    // }
+        // particleSystem.geometry.attributes.position.needsUpdate = true
+        particleSystem.geometry.attributes.size.needsUpdate = true
+      }
+    }
 
-    // this._updateParticles = updateParticles
+    this._updateParticles = updateParticles
 
     if (this._particles) {
       this._scene.remove(this._particles)
@@ -387,15 +398,16 @@ export class ThreeGlobe {
     const x = (event.clientX / window.innerWidth) * 2 - 1
     const y = -(event.clientY / window.innerHeight) * 2 + 1
     const point = new THREE.Vector2(x, y)
+
     this._raycaster.setFromCamera(point, this._camera)
     const intersects = this._raycaster.intersectObject(this._particles, true)
 
     if (intersects.length > 0) {
-      const res = intersects.filter((res) => res?.object)[0]
+      return intersects.filter((res) => res?.object)[0]?.index
 
-      if (res?.object) {
-        return res.object.userData.userIndex
-      }
+      // if (res.object) {
+      //   return res.object.userData.userIndex
+      // }
     }
 
     return null
@@ -406,6 +418,7 @@ export class ThreeGlobe {
     if (userIndex !== this._hoveredUserIndex) {
       this._hoveredUserIndex = userIndex
 
+      console.log(userIndex, this._users[userIndex])
       const user = userIndex !== null ? this._users[userIndex] : null
       this._callbacks.onHoverUser?.(user)
     }

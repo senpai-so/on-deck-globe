@@ -49,7 +49,7 @@ export const weather = {
           discard;
         }
 
-        gl_FragColor = vec4(diffuse, intensity);
+        gl_FragColor = vec4(diffuse, intensity * 0.5);
       }
     `
 }
@@ -83,7 +83,7 @@ export const particles = {
     void main() {
       vColor = color;
       vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = size * (300.0 / -mvPosition.z);
+      gl_PointSize = size * (1.0 / -mvPosition.z);
       gl_Position = projectionMatrix * mvPosition;
     }
   `,

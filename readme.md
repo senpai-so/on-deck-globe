@@ -14,9 +14,10 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
     - laszlo
   - [ ] info box
   - [x] zoom controls
-- [ ] clickable users
+- [x] clickable users
+- [ ] focused user pane
 - [ ] poll data to update opt-ins in real-time
-- [ ] populate initial db (kevin)
+- [x] populate initial db (travis, kevin)
   - id, lat/lng, twitter
 - [ ] twitter opt-in => update db (kevin)
 - [ ] recommended users data (kevin)
