@@ -8,16 +8,15 @@
   background-color: white;
   border-radius: 20px;
 
-  /* height: 500px; */
-  width: 300px;
+  max-width: 300px;
   color: black;
-  padding: 20px;
-
-  text-align: center;
+  padding: 16px;
 }
 
-.container div {
-  padding-bottom: 10px;
+.container h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-align: center;
 }
 
 .profileImages {
@@ -26,20 +25,43 @@
   border-radius: 50px;
   overflow: hidden;
   align-self: center;
-}
-
-.links {
-  display: flex;
-  justify-content: space-around;
-}
-
-.button {
-  background: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
-  color: #fff;
+  margin-bottom: 12px;
 }
 
 .notPublic {
   /**/
   text-align: center;
-  padding-bottom: 2em;
+  margin-bottom: 12px;
+  font-size: 0.9em;
+}
+
+.social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: calc(min(160px, 100%));
+  margin: 12px auto;
+}
+
+.social a {
+  border: 0 none !important;
+}
+
+.social a:hover {
+  border: 0 none !important;
+}
+
+.twitter:hover {
+  color: #2795e9;
+}
+
+.linkedin:hover {
+  color: #2867b2;
+}
+
+.external {
+  position: relative;
+  top: -1px;
+  left: 4px;
 }

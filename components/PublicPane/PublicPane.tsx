@@ -5,6 +5,7 @@ import { useLocalStorage } from 'react-use'
 import { Tooltip } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
 
+import { Button } from '../Button/Button'
 import { Paper } from '../Paper/Paper'
 
 import styles from './styles.module.css'
@@ -49,14 +50,9 @@ export const PublicPane = () => {
         </p>
 
         <div>
-          <a
-            href={tweetLink}
-            target='_blank'
-            rel='noreferrer noopener'
-            className={styles.button}
-          >
+          <Button href={tweetLink} target='_blank' rel='noreferrer noopener'>
             Make me public
-          </a>
+          </Button>
         </div>
       </Paper>
     </div>

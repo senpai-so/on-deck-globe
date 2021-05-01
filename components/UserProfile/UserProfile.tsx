@@ -1,7 +1,9 @@
-import { Button } from '@chakra-ui/button'
-import { User } from 'lib/types'
 import React from 'react'
-import Link from 'next/link'
+
+import { FaTwitter, FaLinkedin } from 'react-icons/fa'
+
+import { User } from 'lib/types'
+import { Button } from '../Button/Button'
 import styles from './styles.module.css'
 
 export const UserProfile = ({ user }: { user: User }) => {
@@ -13,65 +15,82 @@ export const UserProfile = ({ user }: { user: User }) => {
     <div className={styles.container}>
       {userData && (
         <React.Fragment>
-          <div className={styles.profileImages}>
-            {userData.imageUrl && <img src={userData.imageUrl} />}
-          </div>
+          {userData.twitterId ? (
+            <a
+              className={styles.profileImages}
+              href={`https://twitter.com/${userData.twitterId}`}
+              title={`Twitter @${userData.twitterId}`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <img src={userData.imageUrl} />
+            </a>
+          ) : (
+            userData.imageUrl && (
+              <div className={styles.profileImages}>
+                <img src={userData.imageUrl} />
+              </div>
+            )
+          )}
 
-          <div>{userData.name}</div>
+          {userData.twitterId ? (
+            <div>
+              <a
+                href={`https://twitter.com/${userData.twitterId}`}
+                title={`Twitter @${userData.twitterId}`}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <h3>{userData.name}</h3>
+              </a>
+            </div>
+          ) : (
+            <h3>{userData.name}</h3>
+          )}
 
-          <div className={styles.links}>
-            {userData.twitterId && (
-              <div>
-                <Link
-                  href={'https://twitter.com/' + userData.twitterId}
-                  passHref={true}
+          {(userData.twitterId || (userData as any).linkedinId) && (
+            <div className={styles.social}>
+              {userData.twitterId && (
+                <a
+                  className={styles.twitter}
+                  href={`https://twitter.com/${userData.twitterId}`}
+                  title={`Twitter @${userData.twitterId}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
-                  TW
-                </Link>
-              </div>
-            )}
-            {userData.twitterId && (
-              <div>
-                <Link
-                  href={'https://linkedin.com/in/' + userData.linkedinId}
-                  passHref={true}
+                  <FaTwitter size={24} />
+                </a>
+              )}
+
+              {userData.linkedinId && (
+                <a
+                  className={styles.linkedin}
+                  href={`https://linkedin.com/in/${userData.linkedinId}`}
+                  title={`LinkedIn ${userData.name || userData.linkedinId}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
-                  LI
-                </Link>
-              </div>
-            )}
-            {userData.twitterId && (
-              <div>
-                <Link href={userData.personalUrl} passHref={true}>
-                  PR
-                </Link>
-              </div>
-            )}
-          </div>
+                  <FaLinkedin size={24} />
+                </a>
+              )}
+            </div>
+          )}
         </React.Fragment>
       )}
 
       {!userData && (
         <div className={styles.notPublic}>
-          This user did not choose to be public yet!
+          This On Deck Fellow is not public yet.
         </div>
       )}
 
-      <Link
-        href={'https://community.beondeck.com/user/' + user.userId}
-        passHref={true}
+      <Button
+        href={`https://community.beondeck.com/user/${user.userId}`}
+        target='_blank'
+        rel='noreferrer noopener'
       >
-        <Button
-          bgGradient='linear(90.68deg, #b439df 0.26%, #e5337e 102.37%)'
-          _hover={{
-            background:
-              'linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%)'
-          }}
-          color='#fff'
-        >
-          View User on On Deck
-        </Button>
-      </Link>
+        View On Deck Profile
+      </Button>
     </div>
   )
 }
