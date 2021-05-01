@@ -8,6 +8,7 @@ import type { ThreeGlobe } from 'components/GlobeVisualization/ThreeGlobe'
 function useGlobe() {
   const [users, setUsers] = React.useState<User[]>([])
   const [focusedUser, setFocusedUser] = React.useState<User>(null)
+  const [hoveredUser, setHoveredUser] = React.useState<User>(null)
   const infoModal = useDisclosure()
   const globeRef = React.useRef<ThreeGlobe>(null)
 
@@ -17,6 +18,9 @@ function useGlobe() {
 
     focusedUser,
     setFocusedUser,
+
+    hoveredUser,
+    setHoveredUser,
 
     globeRef,
 

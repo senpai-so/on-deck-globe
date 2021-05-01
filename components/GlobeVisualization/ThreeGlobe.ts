@@ -13,6 +13,11 @@ interface Vec2 {
   y: number
 }
 
+interface ThreeGlobeCallbacks {
+  onHoverUser?: (user: User) => void
+  onClickUser?: (user: User) => void
+}
+
 export class ThreeGlobe {
   _camera: THREE.PerspectiveCamera
   _scene: THREE.Scene
@@ -30,6 +35,8 @@ export class ThreeGlobe {
   _target: Vec2
   _targetOnDown?: Vec2
 
+  _hoveredUserIndex?: number
+
   _distance = 100000
   _distanceTarget = 1000
   _curZoomSpeed = 0
@@ -39,18 +46,22 @@ export class ThreeGlobe {
   _users: User[]
 
   _updateParticles: () => void
+  _callbacks: ThreeGlobeCallbacks
 
   constructor({
     canvas,
-    users = []
+    users = [],
+    callbacks = {}
   }: {
     canvas: HTMLCanvasElement
     users?: User[]
+    callbacks?: ThreeGlobeCallbacks
   }) {
     const width = canvas.width
     const height = canvas.height
 
     this._users = users
+    this._callbacks = callbacks
 
     this._mouse = { x: 0, y: 0 }
     this._mouseOnDown = { x: 0, y: 0 }
@@ -280,7 +291,9 @@ export class ThreeGlobe {
     }
 
     function updateParticles() {
-      for (const particleSystem of particleSystems) {
+      for (let userIndex = 0; userIndex < particleSystems.length; ++userIndex) {
+        const particleSystem = particleSystems[userIndex]
+        const isHovered = userIndex === this._hoveredUserIndex
         const vertices = particleSystem.geometry.attributes.position
           .array as Float32Array
         const sizes = particleSystem.geometry.attributes.size
@@ -315,7 +328,10 @@ export class ThreeGlobe {
             vertices[3 * i + 1] = y
             vertices[3 * i + 2] = z
 
-            sizes[i] = particle.size * (Math.min(25, particle.age) / 25)
+            sizes[i] =
+              particle.size *
+              (Math.min(25, particle.age) / 25) *
+              (isHovered ? 10 : 1)
 
             if (particle.age-- <= 0) {
               spawnParticle(particleSystem, i)
@@ -372,7 +388,7 @@ export class ThreeGlobe {
     this._targetOnDown.y = this._target.y
   }
 
-  getUserAtMouse(event): User | null {
+  getUserIndexAtMouse(event): number | null {
     const x = (event.clientX / window.innerWidth) * 2 - 1
     const y = -(event.clientY / window.innerHeight) * 2 + 1
     const point = new THREE.Vector2(x, y)
@@ -383,7 +399,7 @@ export class ThreeGlobe {
       const res = intersects.filter((res) => res?.object)[0]
 
       if (res?.object) {
-        return this._users[res.object.userData.userIndex]
+        return res.object.userData.userIndex
       }
     }
 
@@ -391,6 +407,14 @@ export class ThreeGlobe {
   }
 
   onMouseMove = (event) => {
+    const userIndex = this.getUserIndexAtMouse(event)
+    if (userIndex !== this._hoveredUserIndex) {
+      this._hoveredUserIndex = userIndex
+
+      const user = userIndex !== null ? this._users[userIndex] : null
+      this._callbacks.onHoverUser?.(user)
+    }
+
     if (!this._mouseDown) return
 
     this._mouse.x = -event.clientX
@@ -421,6 +445,14 @@ export class ThreeGlobe {
     event.stopPropagation()
     event.preventDefault()
     this.zoom(event.wheelDeltaY * 0.3)
+  }
+
+  onClick(event) {
+    const userIndex = this.getUserIndexAtMouse(event)
+    if (userIndex >= 0) {
+      const user = this._users[userIndex]
+      this._callbacks.onClickUser?.(user)
+    }
   }
 
   onDocumentKeyDown(event: KeyboardEvent) {

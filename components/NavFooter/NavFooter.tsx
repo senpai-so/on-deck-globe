@@ -18,6 +18,12 @@ export const NavFooter: React.FC = () => {
         {
           title: 'About',
           href: '/about'
+        },
+        {
+          title: 'Stats',
+          href: 'https://app.usefathom.com/share/psrvxdjz/ondeckglobe.com',
+          target: '_blank',
+          rel: 'noopener noreferrer'
         }
       ].filter(Boolean)
     }
@@ -47,15 +53,19 @@ export const NavFooter: React.FC = () => {
             <h3>{section.title}</h3>
 
             <div className={styles.links}>
-              {section.links.map((link) => (
-                <div key={link.title}>
-                  <Link href={link.href}>
-                    <a title={link.title} className={styles.link}>
-                      {link.title}
-                    </a>
-                  </Link>
-                </div>
-              ))}
+              {section.links.map((link) => {
+                const { title, href, ...rest } = link
+
+                return (
+                  <div key={title}>
+                    <Link href={href}>
+                      <a title={title} className={styles.link} {...rest}>
+                        {title}
+                      </a>
+                    </Link>
+                  </div>
+                )
+              })}
             </div>
           </div>
         ))}

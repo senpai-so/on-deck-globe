@@ -8,7 +8,13 @@ import { ThreeGlobe } from './ThreeGlobe'
 import styles from './styles.module.css'
 
 export const GlobeVisualization: React.FC = () => {
-  const { users, globeRef } = Globe.useContainer()
+  const {
+    users,
+    globeRef,
+    hoveredUser,
+    setHoveredUser,
+    setFocusedUser
+  } = Globe.useContainer()
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   const defaultWidth = typeof window !== 'undefined' ? window.innerWidth : 1280
@@ -36,6 +42,13 @@ export const GlobeVisualization: React.FC = () => {
   React.useEffect(() => {
     globeRef.current?.setUsers(users)
   }, [globeRef, users])
+
+  React.useEffect(() => {
+    globeRef.current._callbacks = {
+      onClickUser: setFocusedUser,
+      onHoverUser: setHoveredUser
+    }
+  }, [globeRef, setFocusedUser, setHoveredUser])
 
   const onMouseDown = React.useCallback(
     (event) => {
@@ -69,11 +82,18 @@ export const GlobeVisualization: React.FC = () => {
     [globeRef]
   )
 
+  const onClick = React.useCallback(
+    (event) => {
+      globeRef.current?.onClick(event)
+    },
+    [globeRef]
+  )
+
   const wrapperStyle = React.useMemo(
     () => ({
-      cursor: isMouseDown ? 'move' : 'auto'
+      cursor: hoveredUser ? 'pointer' : isMouseDown ? 'move' : 'auto'
     }),
-    [isMouseDown]
+    [isMouseDown, hoveredUser]
   )
 
   React.useLayoutEffect(() => {
@@ -96,6 +116,7 @@ export const GlobeVisualization: React.FC = () => {
         onMouseUpCapture={onMouseUp}
         onMouseOutCapture={onMouseOut}
         onMouseMoveCapture={onMouseMove}
+        onClick={onClick}
       />
     </div>
   )
