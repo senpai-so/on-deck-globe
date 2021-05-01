@@ -10,22 +10,17 @@ import { User } from 'lib/types'
  * Selecting a user will jump to its position
  */
 export const UserSearch = () => {
-  const { globeRef, users } = Globe.useContainer()
+  const { users, setFocusedUser } = Globe.useContainer()
 
-  const onClickZoomToGoSelection = React.useCallback(
-    (lat: number, lng: number) => {
-      globeRef.current?.zoom(500)
-      globeRef.current?.goToLocation(lat, lng)
+  const onUserSelection = React.useCallback(
+    (event: React.ChangeEvent, user: User) => {
+      // Jump to location and zoom in
+      if (user) {
+        setFocusedUser(user)
+      }
     },
-    [globeRef]
+    [setFocusedUser]
   )
-
-  const onUserSelection = (event: React.ChangeEvent, value: User) => {
-    // Jump to location and zoom in
-    if (value) {
-      onClickZoomToGoSelection(value.lat, value.lng)
-    }
-  }
 
   return (
     <div className={styles.search}>

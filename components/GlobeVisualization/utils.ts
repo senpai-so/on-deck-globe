@@ -24,8 +24,8 @@ export const sphericalToWorld = ({
   radius?: number
 }) => {
   const x = radius * Math.sin(phi) * Math.cos(theta)
-  const y = radius * Math.sin(theta)
-  const z = radius * Math.cos(phi) * Math.cos(theta)
+  const y = radius * Math.cos(phi)
+  const z = radius * Math.sin(phi) * Math.sin(theta)
 
   return {
     x,

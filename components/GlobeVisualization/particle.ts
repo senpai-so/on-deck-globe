@@ -19,10 +19,10 @@ export class Particle {
   theta: number
   radius: number
 
-  acceleration: [number, number, number]
-  velocity: [number, number, number]
+  // acceleration: [number, number, number]
+  // velocity: [number, number, number]
   size: number
-  age: number
+  // age: number
 
   userId: string
   userIndex: number
