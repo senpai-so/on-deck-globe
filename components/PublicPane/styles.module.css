@@ -1,0 +1,46 @@
+.container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  max-width: 350px;
+  color: #000;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content h3 {
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+.content p {
+  font-size: 0.9em;
+  margin: 1em 0;
+}
+
+.button {
+  display: inline-block;
+  background: #23bcff;
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 32px;
+  border: 0 none !important;
+}
+
+.button:hover {
+  border: 0 none !important;
+  background: #1fa8e4;
+}
+
+.button:active {
+  background: #1b91c5;
+}

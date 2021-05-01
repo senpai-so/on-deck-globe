@@ -8,6 +8,7 @@ import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualiza
 import { ZoomControls } from 'components/ZoomControls/ZoomControls'
 import { Globe } from 'state/globe'
 import { UserProfile } from 'components/UserProfile/UserProfile'
+import { PublicPane } from 'components/PublicPane/PublicPane'
 import { FilterControls } from 'components/FilterControls/FilterControls'
 
 import styles from 'styles/index.module.css'
@@ -60,7 +61,10 @@ function GlobePage({ users }: { users: User[] }) {
       {focusedUser && <UserProfile user={focusedUser} />}
 
       <FilterControls />
+
       <ZoomControls />
+
+      <PublicPane />
     </div>
   )
 }
