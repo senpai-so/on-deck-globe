@@ -7,6 +7,7 @@ import { QueryParamProvider } from 'components/QueryParamProvider/QueryParamProv
 import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualization'
 import { ZoomControls } from 'components/ZoomControls/ZoomControls'
 import { Globe } from 'state/globe'
+import { UserProfile } from 'components/UserProfile/UserProfile'
 
 import styles from 'styles/index.module.css'
 
@@ -34,7 +35,7 @@ export default function HomePage({ users }: { users: User[] }) {
 }
 
 function GlobePage({ users }: { users: User[] }) {
-  const { setUsers } = Globe.useContainer()
+  const { setUsers, focusedUser } = Globe.useContainer()
   const [hasMounted, setHasMounted] = React.useState(false)
   React.useEffect(() => {
     setHasMounted(true)
@@ -49,6 +50,8 @@ function GlobePage({ users }: { users: User[] }) {
   return (
     <div className={styles.page}>
       {hasMounted && <GlobeVisualization />}
+
+      {focusedUser && <UserProfile user={focusedUser} />}
 
       <ZoomControls />
     </div>

@@ -1,0 +1,26 @@
+.container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 200px;
+  right: 20px;
+
+  background-color: white;
+  border-radius: 20px;
+
+  /* height: 500px; */
+  width: 300px;
+  color: black;
+  padding: 20px;
+}
+
+.notPublic {
+  /**/
+  text-align: center;
+  padding-bottom: 2em;
+}
+
+.button {
+  background: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
+  color: #fff;
+}
