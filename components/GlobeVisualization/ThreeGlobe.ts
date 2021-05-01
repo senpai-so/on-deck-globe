@@ -13,16 +13,6 @@ interface Vec2 {
   y: number
 }
 
-// interface Callbacks {
-//   onMouseDown: (event: MouseEvent) => void
-//   onMouseMove: (event: MouseEvent) => void
-//   onMouseUp: (event: MouseEvent) => void
-//   onMouseOut: (event: MouseEvent) => void
-//   onMouseWheel: (event: MouseEvent) => void
-//   onDocumentKeyDown: (event: KeyboardEvent) => void
-//   onWindowResize: (event: Event) => void
-// }
-
 export class ThreeGlobe {
   _camera: THREE.PerspectiveCamera
   _scene: THREE.Scene

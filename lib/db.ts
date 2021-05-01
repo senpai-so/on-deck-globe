@@ -16,8 +16,8 @@ export function getSnapshot<T>(
   return ({
     ...data,
     id: snapshot.id,
-    createdAt: snapshot.createTime.toDate(),
-    updatedAt: snapshot.updateTime.toDate()
+    createdAt: snapshot.createTime.toDate().toISOString(),
+    updatedAt: snapshot.updateTime.toDate().toISOString()
   } as any) as T
 }
 

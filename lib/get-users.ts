@@ -14,6 +14,8 @@ export const getUsers = async (): Promise<User[]> => {
     users = docs.map((doc) => db.getSnapshot<User>(doc))
   }
 
+  console.log(users)
+
   return users.map((user) => {
     // ensure that we don't leak private user data if fellows haven't opted in
     if (!user.isPublic) {
