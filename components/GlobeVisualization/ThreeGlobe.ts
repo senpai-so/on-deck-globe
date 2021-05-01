@@ -4,7 +4,7 @@ import random from 'random'
 import { User } from 'lib/types'
 import * as utils from './utils'
 import * as shaders from './shaders'
-import { Particle } from './particle'
+import { Particle, ParticleSystem } from './particle'
 
 const PI_HALF = Math.PI / 2
 
@@ -19,7 +19,8 @@ export class ThreeGlobe {
   _renderer: THREE.WebGLRenderer
   _canvas: HTMLCanvasElement
   _globeMesh: THREE.Mesh
-  _particles: THREE.Points
+  _particles: THREE.Group
+  _raycaster: THREE.Raycaster
 
   _rafHandle?: number
 
@@ -61,6 +62,7 @@ export class ThreeGlobe {
     this._camera.position.z = this._distance
 
     this._scene = new THREE.Scene()
+    this._raycaster = new THREE.Raycaster()
 
     const geometry = new THREE.SphereGeometry(this._radius, 120, 120)
     const textureLoader = new THREE.TextureLoader()
@@ -139,146 +141,15 @@ export class ThreeGlobe {
     // user particles
     const numUsers = users.length
     const numParticlesPerUser = 30
+    const particleSystems: ParticleSystem[] = []
+    const particles = new THREE.Group()
     // const numParticles = numUsers * numParticlesPerUser
-    const vertices = []
-    const colors = []
-    const sizes = []
-    const particles = []
 
     // position
     // velocity
     // age
     // size
     // color
-
-    const color = new THREE.Color()
-
-    for (let i = 0; i < numUsers; ++i) {
-      const user = users[i]
-      const { lat, lng } = user
-      if (!(lat && lng)) {
-        continue
-      }
-
-      const { phi, theta } = utils.latLngToSpherical({ lat, lng })
-
-      for (let j = 0; j < numParticlesPerUser; ++j) {
-        const particle = new Particle()
-        particle.main = j === 0
-        particle.lat = lat
-        particle.lng = lng
-        particle.phi0 = phi
-        particle.theta0 = theta
-        particle.radius0 = this._radius
-        particle.userId = user.id
-        particle.userIndex = i
-        particles.push(particle)
-
-        spawnParticle(particles.length - 1)
-
-        const x =
-          particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
-        const y = particle.radius * Math.cos(particle.phi)
-        const z =
-          particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
-
-        vertices.push(x, y, z)
-
-        color.setHSL(
-          (particle.lng + random.float(-5, 5) + 180) / 360,
-          1.0,
-          0.75
-        )
-        colors.push(color.r, color.g, color.b)
-
-        sizes.push(particle.size)
-      }
-    }
-
-    function spawnParticle(index) {
-      const particle = particles[index]
-      if (particle.main) {
-        particle.radius = particle.radius0 + 2
-        particle.phi = particle.phi0
-        particle.theta = particle.theta0
-        particle.size = 20
-        return
-      }
-
-      particle.age = random.int(80, 200)
-      particle.acceleration = [
-        random.float(-0.0000001, 0.0000001),
-        random.float(-0.0000001, 0.0000001),
-        random.float(0.000000001, 0.000001)
-      ]
-      particle.velocity = [
-        random.float(-0.000001, 0.000001),
-        random.float(-0.000001, 0.000001),
-        random.float(0.000001, 0.0001)
-      ]
-      particle.size = random.float(1, 10)
-
-      const r = particle.radius0 + random.float(0, 2)
-      const phi = particle.phi0 + random.float(-0.001, 0.001) // horizontal
-      const theta = particle.theta0 + random.float(-0.001, 0.001) // vertical
-      particle.phi = phi
-      particle.theta = theta
-      particle.radius = r
-    }
-
-    const geometry = new THREE.BufferGeometry()
-    geometry.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(vertices, 3).setUsage(
-        THREE.DynamicDrawUsage
-      )
-    )
-
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1))
-
-    function updateParticles() {
-      const vertices = geometry.attributes.position.array as Float32Array
-      const sizes = geometry.attributes.size.array as Float32Array
-
-      for (let i = 0; i < particles.length; ++i) {
-        const particle = particles[i]
-        if (!particle.main) {
-          particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
-          particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
-          particle.acceleration[2] += random.float(-0.00000001, 0.000001)
-
-          particle.velocity[0] += particle.acceleration[0]
-          particle.velocity[1] += particle.acceleration[1]
-          particle.velocity[2] += particle.acceleration[2]
-
-          particle.phi += particle.velocity[0]
-          particle.theta += particle.velocity[1]
-          particle.radius += particle.velocity[2]
-
-          const x =
-            particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
-          const y = particle.radius * Math.cos(particle.phi)
-          const z =
-            particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
-
-          vertices[3 * i + 0] = x
-          vertices[3 * i + 1] = y
-          vertices[3 * i + 2] = z
-
-          sizes[i] = particle.size * (Math.min(25, particle.age) / 25)
-
-          if (particle.age-- <= 0) {
-            spawnParticle(i)
-          }
-        }
-      }
-
-      geometry.attributes.position.needsUpdate = true
-      geometry.attributes.size.needsUpdate = true
-    }
-
-    this._updateParticles = updateParticles
 
     const sprite = new THREE.TextureLoader().load('/disc.png')
     // const material = new THREE.PointsMaterial({
@@ -308,13 +179,162 @@ export class ThreeGlobe {
       vertexColors: true
     })
 
-    const points = new THREE.Points(geometry, material)
+    const color = new THREE.Color()
+
+    for (let i = 0; i < numUsers; ++i) {
+      const user = users[i]
+      const { lat, lng } = user
+      if (!(lat && lng)) {
+        continue
+      }
+
+      const { phi, theta } = utils.latLngToSpherical({ lat, lng })
+      const particleSystem = new ParticleSystem()
+      particleSystem.particles = []
+      const vertices = []
+      const colors = []
+      const sizes = []
+
+      for (let j = 0; j < numParticlesPerUser; ++j) {
+        const particle = new Particle()
+        particle.main = j === 0
+        particle.lat = lat
+        particle.lng = lng
+        particle.phi0 = phi
+        particle.theta0 = theta
+        particle.radius0 = this._radius
+        particle.userId = user.id
+        particle.userIndex = i
+        particleSystem.particles.push(particle)
+
+        spawnParticle(particleSystem, particleSystem.particles.length - 1)
+
+        const x =
+          particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
+        const y = particle.radius * Math.cos(particle.phi)
+        const z =
+          particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
+
+        vertices.push(x, y, z)
+
+        color.setHSL(
+          (particle.lng + random.float(-5, 5) + 180) / 360,
+          1.0,
+          0.75
+        )
+        colors.push(color.r, color.g, color.b)
+
+        sizes.push(particle.size)
+      }
+
+      const geometry = new THREE.BufferGeometry()
+      geometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(vertices, 3).setUsage(
+          THREE.DynamicDrawUsage
+        )
+      )
+
+      geometry.setAttribute(
+        'color',
+        new THREE.Float32BufferAttribute(colors, 3)
+      )
+      geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1))
+      particleSystem.geometry = geometry
+      particleSystems.push(particleSystem)
+
+      const points = new THREE.Points(particleSystem.geometry, material)
+      points.userData.userIndex = i
+      particles.add(points)
+    }
+
+    function spawnParticle(particleSystem: ParticleSystem, index: number) {
+      const particle = particleSystem.particles[index]
+      if (particle.main) {
+        particle.radius = particle.radius0 + 2
+        particle.phi = particle.phi0
+        particle.theta = particle.theta0
+        particle.size = 20
+        return
+      }
+
+      particle.age = random.int(80, 200)
+      particle.acceleration = [
+        random.float(-0.0000001, 0.0000001),
+        random.float(-0.0000001, 0.0000001),
+        random.float(0.000000001, 0.000001)
+      ]
+      particle.velocity = [
+        random.float(-0.000001, 0.000001),
+        random.float(-0.000001, 0.000001),
+        random.float(0.000001, 0.0001)
+      ]
+      particle.size = random.float(1, 10)
+
+      const r = particle.radius0 + random.float(0, 2)
+      const phi = particle.phi0 + random.float(-0.001, 0.001) // horizontal
+      const theta = particle.theta0 + random.float(-0.001, 0.001) // vertical
+      particle.phi = phi
+      particle.theta = theta
+      particle.radius = r
+    }
+
+    function updateParticles() {
+      for (const particleSystem of particleSystems) {
+        const vertices = particleSystem.geometry.attributes.position
+          .array as Float32Array
+        const sizes = particleSystem.geometry.attributes.size
+          .array as Float32Array
+
+        for (let i = 0; i < particleSystem.particles.length; ++i) {
+          const particle = particleSystem.particles[i]
+          if (!particle.main) {
+            particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
+            particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
+            particle.acceleration[2] += random.float(-0.00000001, 0.000001)
+
+            particle.velocity[0] += particle.acceleration[0]
+            particle.velocity[1] += particle.acceleration[1]
+            particle.velocity[2] += particle.acceleration[2]
+
+            particle.phi += particle.velocity[0]
+            particle.theta += particle.velocity[1]
+            particle.radius += particle.velocity[2]
+
+            const x =
+              particle.radius *
+              Math.sin(particle.phi) *
+              Math.cos(particle.theta)
+            const y = particle.radius * Math.cos(particle.phi)
+            const z =
+              particle.radius *
+              Math.sin(particle.phi) *
+              Math.sin(particle.theta)
+
+            vertices[3 * i + 0] = x
+            vertices[3 * i + 1] = y
+            vertices[3 * i + 2] = z
+
+            sizes[i] = particle.size * (Math.min(25, particle.age) / 25)
+
+            if (particle.age-- <= 0) {
+              spawnParticle(particleSystem, i)
+            }
+          }
+        }
+
+        particleSystem.geometry.attributes.position.needsUpdate = true
+        particleSystem.geometry.attributes.size.needsUpdate = true
+      }
+    }
+
+    this._updateParticles = updateParticles
 
     if (this._particles) {
       this._scene.remove(this._particles)
     }
 
-    this._particles = points
+    this._particles = particles
     this._scene.add(this._particles)
   }
 
@@ -352,6 +372,24 @@ export class ThreeGlobe {
     this._targetOnDown.y = this._target.y
   }
 
+  getUserAtMouse(event): User | null {
+    const x = (event.clientX / window.innerWidth) * 2 - 1
+    const y = -(event.clientY / window.innerHeight) * 2 + 1
+    const point = new THREE.Vector2(x, y)
+    this._raycaster.setFromCamera(point, this._camera)
+    const intersects = this._raycaster.intersectObject(this._particles, true)
+
+    if (intersects.length > 0) {
+      const res = intersects.filter((res) => res?.object)[0]
+
+      if (res?.object) {
+        return this._users[res.object.userData.userIndex]
+      }
+    }
+
+    return null
+  }
+
   onMouseMove = (event) => {
     if (!this._mouseDown) return
 
@@ -380,8 +418,9 @@ export class ThreeGlobe {
   }
 
   onMouseWheel(event) {
-    this.zoom(event.nativeEvent.wheelDeltaY * 0.3)
-    return false
+    event.stopPropagation()
+    event.preventDefault()
+    this.zoom(event.wheelDeltaY * 0.3)
   }
 
   onDocumentKeyDown(event: KeyboardEvent) {

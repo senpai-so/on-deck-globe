@@ -76,6 +76,16 @@ export const GlobeVisualization: React.FC = () => {
     [isMouseDown]
   )
 
+  React.useLayoutEffect(() => {
+    const obj = canvasRef.current
+    if (!obj) return
+
+    obj.addEventListener('wheel', onMouseWheel)
+    return () => {
+      obj.removeEventListener('wheel', onMouseWheel)
+    }
+  }, [canvasRef, onMouseWheel])
+
   return (
     <div className={styles.wrapper} ref={measureRef} style={wrapperStyle}>
       <canvas
@@ -86,7 +96,6 @@ export const GlobeVisualization: React.FC = () => {
         onMouseUpCapture={onMouseUp}
         onMouseOutCapture={onMouseOut}
         onMouseMoveCapture={onMouseMove}
-        onWheelCapture={onMouseWheel}
       />
     </div>
   )

@@ -1,3 +1,10 @@
+import { BufferGeometry } from 'three'
+
+export class ParticleSystem {
+  geometry: BufferGeometry
+  particles: Particle[]
+}
+
 export class Particle {
   main: boolean
 
