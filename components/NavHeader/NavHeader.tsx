@@ -14,6 +14,12 @@ export const NavHeader: React.FC<{ full?: boolean }> = () => {
           </a>
         </Link>
       </div>
+
+      <nav className={styles.nav}>
+        <Link href='/about'>
+          <a className={styles.link}>About</a>
+        </Link>
+      </nav>
     </header>
   )
 }

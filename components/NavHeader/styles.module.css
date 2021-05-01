@@ -41,9 +41,12 @@
 
 .nav a {
   margin-right: 12px;
-  padding: 12px 32px;
   font-size: 16px;
   font-weight: 600px;
+}
+
+.nav a:last-child {
+  margin-right: 0;
 }
 
 .button {
@@ -61,12 +64,4 @@
 
 .avatar:active {
   opacity: 0.9;
-}
-
-.link {
-  color: #000;
-}
-
-.link:hover {
-  color: #00afed;
 }

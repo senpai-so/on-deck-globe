@@ -13,6 +13,7 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
   - [ ] search / filtering users
     - laszlo
   - [ ] info box
+  - [x] zoom controls
 - [ ] clickable users
 - [ ] poll data to update opt-ins in real-time
 - [ ] populate initial db (kevin)
