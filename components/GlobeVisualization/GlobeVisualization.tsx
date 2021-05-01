@@ -8,9 +8,8 @@ import { ThreeGlobe } from './ThreeGlobe'
 import styles from './styles.module.css'
 
 export const GlobeVisualization: React.FC = () => {
-  const { users } = Globe.useContainer()
+  const { users, globeRef } = Globe.useContainer()
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
-  const globeRef = React.useRef<ThreeGlobe>(null)
 
   const defaultWidth = typeof window !== 'undefined' ? window.innerWidth : 1280
   const defaultHeight = typeof window !== 'undefined' ? window.innerHeight : 720
@@ -28,7 +27,7 @@ export const GlobeVisualization: React.FC = () => {
     globe.animate()
 
     return () => globe.destroy()
-  }, [canvasRef])
+  }, [canvasRef, globeRef])
 
   React.useEffect(() => {
     globeRef.current?.resize(width, height)

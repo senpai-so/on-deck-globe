@@ -7,8 +7,7 @@ import pMap from 'p-map'
 import { NotionPage } from 'components/NotionPage/NotionPage'
 
 const notion = new NotionAPI()
-const notionPageId = '26ae0a0a5d38415ea95dde833b8c3370'
-// '470e4e14e6af4af18fd296161e9c1d4d'
+const notionPageId = '470e4e14e6af4af18fd296161e9c1d4d'
 
 export const getStaticProps = async () => {
   const recordMap = await notion.getPage(notionPageId)

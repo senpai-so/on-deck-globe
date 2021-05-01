@@ -30,7 +30,7 @@ export class ThreeGlobe {
   _targetOnDown?: Vec2
 
   _distance = 100000
-  _distanceTarget = 100000
+  _distanceTarget = 1000
   _curZoomSpeed = 0
   _mouseDown = false
   _radius = 200
@@ -151,7 +151,6 @@ export class ThreeGlobe {
     // size
     // color
 
-    console.log('addUsers', numUsers, numParticlesPerUser)
     const color = new THREE.Color()
 
     for (let i = 0; i < numUsers; ++i) {
@@ -270,7 +269,6 @@ export class ThreeGlobe {
           sizes[i] = particle.size * (Math.min(25, particle.age) / 25)
 
           if (particle.age-- <= 0) {
-            console.log(particle.velocity)
             spawnParticle(i)
           }
         }
@@ -382,30 +380,34 @@ export class ThreeGlobe {
   }
 
   onMouseWheel(event) {
-    this._zoom(event.nativeEvent.wheelDeltaY * 0.3)
+    this.zoom(event.nativeEvent.wheelDeltaY * 0.3)
     return false
   }
 
   onDocumentKeyDown(event: KeyboardEvent) {
     switch (event.keyCode) {
       case 38:
-        this._zoom(100)
+        this.zoom(100)
         event.preventDefault()
         break
       case 40:
-        this._zoom(-100)
+        this.zoom(-100)
         event.preventDefault()
         break
     }
   }
 
-  _zoom(delta) {
-    this._distanceTarget -= delta
-    this._distanceTarget = Math.max(350, Math.min(1000, this._distanceTarget))
+  zoom(delta?: number) {
+    if (delta === undefined) {
+      this._distanceTarget = 1000
+    } else {
+      this._distanceTarget -= delta
+      this._distanceTarget = Math.max(350, Math.min(2000, this._distanceTarget))
+    }
   }
 
   render() {
-    this._zoom(this._curZoomSpeed)
+    this.zoom(this._curZoomSpeed)
 
     this._rotation.x += (this._target.x - this._rotation.x) * 0.1
     this._rotation.y += (this._target.y - this._rotation.y) * 0.1

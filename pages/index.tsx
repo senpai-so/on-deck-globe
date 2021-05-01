@@ -5,6 +5,7 @@ import { getUsers } from 'lib/get-users'
 import { Layout } from 'components/Layout/Layout'
 import { QueryParamProvider } from 'components/QueryParamProvider/QueryParamProvider'
 import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualization'
+import { ZoomControls } from 'components/ZoomControls/ZoomControls'
 import { Globe } from 'state/globe'
 
 import styles from 'styles/index.module.css'
@@ -46,6 +47,10 @@ function GlobePage({ users }: { users: User[] }) {
   }, [users, setUsers])
 
   return (
-    <div className={styles.page}>{hasMounted && <GlobeVisualization />}</div>
+    <div className={styles.page}>
+      {hasMounted && <GlobeVisualization />}
+
+      <ZoomControls />
+    </div>
   )
 }

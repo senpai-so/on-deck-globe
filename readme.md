@@ -10,7 +10,8 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
 
 - [x] basic globe viz
 - [ ] foreground layer
-  - [ ] search / filtering users based on query
+  - [ ] search / filtering users
+    - laszlo
   - [ ] info box
 - [ ] clickable users
 - [ ] poll data to update opt-ins in real-time
@@ -19,7 +20,7 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
 - [ ] twitter opt-in => update db (kevin)
 - [ ] recommended users data (kevin)
 - [ ] recommended users viz (travis)
-- [ ] about page
+- [x] about page
 
 ## License
 
