@@ -12,15 +12,34 @@
   width: 300px;
   color: black;
   padding: 20px;
+
+  text-align: center;
+}
+
+.container div {
+  padding-bottom: 10px;
+}
+
+.profileImages {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  overflow: hidden;
+  align-self: center;
+}
+
+.links {
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  background: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
+  color: #fff;
 }
 
 .notPublic {
   /**/
   text-align: center;
   padding-bottom: 2em;
-}
-
-.button {
-  background: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
-  color: #fff;
 }

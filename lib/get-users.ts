@@ -27,7 +27,10 @@ export const getUsers = async (): Promise<User[]> => {
         fellow: {
           id: user.fellow.id,
           name: user.fellow.name,
-          twitterId: user.fellow.twitterId
+          imageUrl: user.fellow.imageUrl,
+          twitterId: user.fellow.twitterId,
+          linkedinId: user.fellow.linkedinId,
+          personalUrl: user.fellow.personalUrl
         }
       }
     }

@@ -7,18 +7,51 @@ import styles from './styles.module.css'
 export const UserProfile = ({ user }: { user: User }) => {
   if (!user) return null
 
-  console.log('user', user)
+  const userData = user.fellow
 
   return (
     <div className={styles.container}>
-      {user.fellow && (
-        <div>
-          <div>Image</div>
-          <div>Links</div>
-        </div>
+      {userData && (
+        <React.Fragment>
+          <div className={styles.profileImages}>
+            {userData.imageUrl && <img src={userData.imageUrl} />}
+          </div>
+
+          <div>{userData.name}</div>
+
+          <div className={styles.links}>
+            {userData.twitterId && (
+              <div>
+                <Link
+                  href={'https://twitter.com/' + userData.twitterId}
+                  passHref={true}
+                >
+                  TW
+                </Link>
+              </div>
+            )}
+            {userData.twitterId && (
+              <div>
+                <Link
+                  href={'https://linkedin.com/in/' + userData.linkedinId}
+                  passHref={true}
+                >
+                  LI
+                </Link>
+              </div>
+            )}
+            {userData.twitterId && (
+              <div>
+                <Link href={userData.personalUrl} passHref={true}>
+                  PR
+                </Link>
+              </div>
+            )}
+          </div>
+        </React.Fragment>
       )}
 
-      {!user.fellow && (
+      {!userData && (
         <div className={styles.notPublic}>
           This user did not choose to be public yet!
         </div>

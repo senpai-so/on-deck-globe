@@ -8,6 +8,7 @@ import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualiza
 import { ZoomControls } from 'components/ZoomControls/ZoomControls'
 import { Globe } from 'state/globe'
 import { UserProfile } from 'components/UserProfile/UserProfile'
+import { FilterControls } from 'components/FilterControls/FilterControls'
 
 import styles from 'styles/index.module.css'
 
@@ -35,7 +36,7 @@ export default function HomePage({ users }: { users: User[] }) {
 }
 
 function GlobePage({ users }: { users: User[] }) {
-  const { setUsers, focusedUser } = Globe.useContainer()
+  const { setUsers, focusedUser, filterPublicOnly } = Globe.useContainer()
   const [hasMounted, setHasMounted] = React.useState(false)
   React.useEffect(() => {
     setHasMounted(true)
@@ -44,8 +45,13 @@ function GlobePage({ users }: { users: User[] }) {
   React.useEffect(() => {
     if (!users?.length) return
 
-    setUsers(users)
-  }, [users, setUsers])
+    if (filterPublicOnly) {
+      const publicUsers = users.filter((user) => !!user.isPublic)
+      setUsers(publicUsers)
+    } else {
+      setUsers(users)
+    }
+  }, [users, setUsers, filterPublicOnly])
 
   return (
     <div className={styles.page}>
@@ -53,6 +59,7 @@ function GlobePage({ users }: { users: User[] }) {
 
       {focusedUser && <UserProfile user={focusedUser} />}
 
+      <FilterControls />
       <ZoomControls />
     </div>
   )
