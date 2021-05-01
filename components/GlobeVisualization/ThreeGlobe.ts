@@ -418,7 +418,7 @@ export class ThreeGlobe {
     if (userIndex !== this._hoveredUserIndex) {
       this._hoveredUserIndex = userIndex
 
-      console.log(userIndex, this._users[userIndex])
+      console.log('userIndex', userIndex, this._users[userIndex])
       const user = userIndex !== null ? this._users[userIndex] : null
       this._callbacks.onHoverUser?.(user)
     }
@@ -483,6 +483,16 @@ export class ThreeGlobe {
       this._distanceTarget -= delta
       this._distanceTarget = Math.max(350, Math.min(2000, this._distanceTarget))
     }
+  }
+
+  goToLocation(lat: number, lng: number) {
+    console.log('goToLocation', lat, lng)
+
+    // Convert a geo location to a target vector on the globe
+    const { phi, theta } = utils.latLngToSpherical({ lat, lng })
+    const pos = utils.sphericalToWorld({ phi, theta })
+    this._target.x = pos.x // -48.45148720224027 // pos.x
+    this._target.y = pos.y // 136.10557035126254 // pos.y
   }
 
   render() {

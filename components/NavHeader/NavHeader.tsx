@@ -2,8 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 
 import styles from './styles.module.css'
+import { UserSearch } from '../UserSearch/UserSearch'
 
-export const NavHeader: React.FC<{ full?: boolean }> = () => {
+export const NavHeader: React.FC<{ full?: boolean }> = ({ full }) => {
   return (
     <header className={styles.header}>
       <div className={styles.content}>
@@ -13,6 +14,7 @@ export const NavHeader: React.FC<{ full?: boolean }> = () => {
             On Deck Globe
           </a>
         </Link>
+        {!full && <UserSearch />}
       </div>
 
       <nav className={styles.nav}>
