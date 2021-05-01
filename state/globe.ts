@@ -13,12 +13,24 @@ function useGlobe() {
   const infoModal = useDisclosure()
   const globeRef = React.useRef<ThreeGlobe>(null)
 
+  const onSetFocusedUser = React.useCallback(
+    (user?: User) => {
+      setFocusedUser(user)
+
+      if (user && globeRef.current) {
+        globeRef.current.zoomTo(500)
+        globeRef.current.goToLocation(user.lat, user.lng)
+      }
+    },
+    [setFocusedUser, globeRef]
+  )
+
   return {
     users,
     setUsers,
 
     focusedUser,
-    setFocusedUser,
+    setFocusedUser: onSetFocusedUser,
 
     hoveredUser,
     setHoveredUser,

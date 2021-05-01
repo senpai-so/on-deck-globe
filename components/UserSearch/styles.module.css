@@ -1,0 +1,8 @@
+/* Search */
+.search {
+  flex: 1;
+  justify-content: center;
+  display: flex;
+
+  pointer-events: all;
+}

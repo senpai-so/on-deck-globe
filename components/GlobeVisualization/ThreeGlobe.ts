@@ -66,7 +66,7 @@ export class ThreeGlobe {
     this._mouse = { x: 0, y: 0 }
     this._mouseOnDown = { x: 0, y: 0 }
     this._rotation = { x: 0, y: 0 }
-    this._target = { x: (Math.PI * 3) / 2, y: Math.PI / 6.0 }
+    this._target = { x: (Math.PI * 3) / 2.2, y: Math.PI / 3.0 }
     this._targetOnDown = { x: 0, y: 0 }
 
     this._camera = new THREE.PerspectiveCamera(30, width / height, 1, 10000)
@@ -226,12 +226,7 @@ export class ThreeGlobe {
 
         spawnParticle(particleSystem, particleSystem.particles.length - 1)
 
-        const x =
-          particle.radius * Math.sin(particle.phi) * Math.cos(particle.theta)
-        const y = particle.radius * Math.cos(particle.phi)
-        const z =
-          particle.radius * Math.sin(particle.phi) * Math.sin(particle.theta)
-
+        const { x, y, z } = utils.sphericalToWorld(particle)
         vertices.push(x, y, z)
 
         color.setHSL((particle.lng + random.float(-5, 5) + 180) / 360, 0.9, 0.5)
@@ -387,8 +382,8 @@ export class ThreeGlobe {
 
     this._mouseDown = true
 
-    this._mouseOnDown.x = -event.clientX
-    this._mouseOnDown.y = event.clientY
+    this._mouseOnDown.x = event.clientX
+    this._mouseOnDown.y = -event.clientY
 
     this._targetOnDown.x = this._target.x
     this._targetOnDown.y = this._target.y
@@ -418,15 +413,15 @@ export class ThreeGlobe {
     if (userIndex !== this._hoveredUserIndex) {
       this._hoveredUserIndex = userIndex
 
-      console.log(userIndex, this._users[userIndex])
+      console.log('userIndex', userIndex, this._users[userIndex])
       const user = userIndex !== null ? this._users[userIndex] : null
       this._callbacks.onHoverUser?.(user)
     }
 
     if (!this._mouseDown) return
 
-    this._mouse.x = -event.clientX
-    this._mouse.y = event.clientY
+    this._mouse.x = event.clientX
+    this._mouse.y = -event.clientY
 
     const zoomDamp = this._distance / 1000
 
@@ -437,8 +432,7 @@ export class ThreeGlobe {
       this._targetOnDown.y +
       (this._mouse.y - this._mouseOnDown.y) * 0.005 * zoomDamp
 
-    this._target.y = this._target.y > PI_HALF ? PI_HALF : this._target.y
-    this._target.y = this._target.y < -PI_HALF ? -PI_HALF : this._target.y
+    this._target.y = Math.max(-PI_HALF, Math.min(PI_HALF, this._target.y))
   }
 
   onMouseUp() {
@@ -476,6 +470,14 @@ export class ThreeGlobe {
     }
   }
 
+  zoomTo(distance?: number) {
+    if (distance === undefined) {
+      this._distanceTarget = 1000
+    } else {
+      this._distanceTarget = Math.max(350, Math.min(2000, distance))
+    }
+  }
+
   zoom(delta?: number) {
     if (delta === undefined) {
       this._distanceTarget = 1000
@@ -483,6 +485,18 @@ export class ThreeGlobe {
       this._distanceTarget -= delta
       this._distanceTarget = Math.max(350, Math.min(2000, this._distanceTarget))
     }
+  }
+
+  goToLocation(lat: number, lng: number) {
+    console.log('goToLocation', lat, lng)
+
+    // Convert a geo location to a target vector on the globe
+    const { phi, theta } = utils.latLngToSpherical({ lat, lng })
+    // const pos = utils.sphericalToWorld({ phi, theta })
+
+    console.log({ lat, lng, phi, theta })
+    this._target.x = theta
+    this._target.y = phi
   }
 
   render() {
@@ -493,10 +507,11 @@ export class ThreeGlobe {
     this._distance += (this._distanceTarget - this._distance) * 0.3
 
     const cameraPos = utils.sphericalToWorld({
-      phi: this._rotation.x,
-      theta: this._rotation.y,
+      phi: this._rotation.y,
+      theta: this._rotation.x,
       radius: this._distance
     })
+
     this._camera.position.x = cameraPos.x
     this._camera.position.y = cameraPos.y
     this._camera.position.z = cameraPos.z

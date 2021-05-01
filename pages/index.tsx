@@ -25,13 +25,13 @@ export async function getStaticProps() {
 
 export default function HomePage({ users }: { users: User[] }) {
   return (
-    <Layout>
-      <QueryParamProvider>
-        <Globe.Provider>
+    <Globe.Provider>
+      <Layout>
+        <QueryParamProvider>
           <GlobePage users={users} />
-        </Globe.Provider>
-      </QueryParamProvider>
-    </Layout>
+        </QueryParamProvider>
+      </Layout>
+    </Globe.Provider>
   )
 }
 
