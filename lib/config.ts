@@ -20,6 +20,8 @@ export const fathomConfig = fathomId
     }
   : undefined
 
+export const imageCDNHost = 'https://ssfy.io'
+
 // ----------------------------------------------------------------------------
 
 export function getEnv(

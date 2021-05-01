@@ -19,7 +19,6 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
 - [ ] twitter opt-in => update db (kevin)
 - [ ] recommended users data (kevin)
 - [ ] recommended users viz (travis)
-- [ ]
 - [ ] about page
 
 ## License

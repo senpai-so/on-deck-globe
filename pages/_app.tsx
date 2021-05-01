@@ -1,3 +1,6 @@
+// core styles shared by all of react-notion-x (required)
+import 'react-notion-x/src/styles.css'
+
 // core styles for static tweet renderer (optional)
 import 'react-static-tweets/styles.css'
 
@@ -30,10 +33,6 @@ const theme = extendTheme({
         color: 'var(--text-color)',
         bg: 'var(--body-bg-color)'
       },
-      'h1,h2,h3,h4,h5,h6': {
-        fontWeight: '700',
-        color: 'var(--text-h-color)'
-      },
       h1: {
         fontSize: '36px'
       },
@@ -43,8 +42,8 @@ const theme = extendTheme({
     }
   },
   fonts: {
-    body: `'Nunito', -apple-system, BlinkMacSystemFont, sans-serif`,
-    heading: `'Nunito', -apple-system, BlinkMacSystemFont, sans-serif`
+    body: `'Inter', -apple-system, BlinkMacSystemFont, sans-serif`,
+    heading: `'Inter', -apple-system, BlinkMacSystemFont, sans-serif`
   },
   light: {
     bg: 'var(--body-bg-color)'

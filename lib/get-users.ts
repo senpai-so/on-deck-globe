@@ -2,7 +2,7 @@ import { User } from './types'
 import * as db from './db'
 import mockUsers from './mock-users'
 
-const useRealData = true
+const useRealData = false
 
 export const getUsers = async (): Promise<User[]> => {
   let users: User[] = mockUsers
