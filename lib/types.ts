@@ -1,9 +1,10 @@
 export interface User {
-  id: string
+  id?: string // firestore document id
+  userId: string // on deck user id
   isPublic: boolean
   lat?: number
   lng?: number
-  fellow: Fellow
+  fellow?: Fellow
 }
 
 export interface Fellow {

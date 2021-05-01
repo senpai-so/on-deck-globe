@@ -2,7 +2,7 @@ import { User } from './types'
 
 const users: User[] = [
   {
-    id: '4391',
+    userId: '4391',
     isPublic: true,
     lng: -74.016915901860472,
     lat: 40.69555921429896,
@@ -180,7 +180,7 @@ const users: User[] = [
     }
   },
   {
-    id: '4449',
+    userId: '4449',
     isPublic: true,
     lat: 37.445292122888759,
     lng: -122.11658310387372,
@@ -315,7 +315,7 @@ const users: User[] = [
     }
   },
   {
-    id: '4410',
+    userId: '4410',
     lat: 37.760671182879882,
     lng: -122.46830914030043,
     isPublic: true,
@@ -522,7 +522,7 @@ const users: User[] = [
     }
   },
   {
-    id: '4406',
+    userId: '4406',
     isPublic: true,
     lng: 6.9500612414278091,
     lat: 50.987189041990781,

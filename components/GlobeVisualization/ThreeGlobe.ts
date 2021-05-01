@@ -151,7 +151,7 @@ export class ThreeGlobe {
 
     // user particles
     const numUsers = users.length
-    const numParticlesPerUser = 30
+    const numParticlesPerUser = 1
     const particleSystems: ParticleSystem[] = []
     const particles = new THREE.Group()
     // const numParticles = numUsers * numParticlesPerUser
@@ -230,8 +230,8 @@ export class ThreeGlobe {
 
         color.setHSL(
           (particle.lng + random.float(-5, 5) + 180) / 360,
-          1.0,
-          0.75
+          0.75,
+          0.5
         )
         colors.push(color.r, color.g, color.b)
 
@@ -265,7 +265,7 @@ export class ThreeGlobe {
         particle.radius = particle.radius0 + 2
         particle.phi = particle.phi0
         particle.theta = particle.theta0
-        particle.size = 20
+        particle.size = random.float(30, 50)
         return
       }
 

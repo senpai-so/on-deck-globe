@@ -8,6 +8,20 @@ export const db = new firestore.Firestore({
 
 export const users = db.collection(config.firebaseCollectionUsers)
 
+export async function get<T>(
+  doc: firestore.DocumentReference
+): Promise<T | undefined> {
+  const snapshot = await doc.get()
+
+  if (snapshot.exists) {
+    const res = getSnapshot<T>(snapshot)
+
+    return res
+  }
+
+  return undefined
+}
+
 export function getSnapshot<T>(
   snapshot: firestore.DocumentSnapshot<firestore.DocumentData>
 ): T {

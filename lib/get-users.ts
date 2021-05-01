@@ -2,7 +2,7 @@ import { User } from './types'
 import * as db from './db'
 import mockUsers from './mock-users'
 
-const useRealData = false
+const useRealData = true
 
 export const getUsers = async (): Promise<User[]> => {
   let users: User[] = mockUsers
@@ -14,8 +14,6 @@ export const getUsers = async (): Promise<User[]> => {
     users = docs.map((doc) => db.getSnapshot<User>(doc))
   }
 
-  console.log(users)
-
   return users.map((user) => {
     // ensure that we don't leak private user data if fellows haven't opted in
     if (!user.isPublic) {
@@ -24,7 +22,14 @@ export const getUsers = async (): Promise<User[]> => {
         fellow: null
       }
     } else {
-      return user
+      return {
+        ...user,
+        fellow: {
+          id: user.fellow.id,
+          name: user.fellow.name,
+          twitterId: user.fellow.twitterId
+        }
+      }
     }
   })
 }
