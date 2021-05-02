@@ -377,12 +377,14 @@ export class ThreeGlobe {
   }
 
   onMouseDown(event) {
-    event.preventDefault()
+    // if (event.type !== 'touchstart') event.preventDefault()
 
     this._mouseDown = true
 
-    this._mouseOnDown.x = event.clientX
-    this._mouseOnDown.y = -event.clientY
+    const { clientX, clientY } = this.getEventCoordinates(event)
+
+    this._mouseOnDown.x = clientX
+    this._mouseOnDown.y = -clientY
 
     this._targetOnDown.x = this._target.x
     this._targetOnDown.y = this._target.y
@@ -393,8 +395,10 @@ export class ThreeGlobe {
       return null
     }
 
-    const x = (event.clientX / window.innerWidth) * 2 - 1
-    const y = -(event.clientY / window.innerHeight) * 2 + 1
+    const { clientX, clientY } = this.getEventCoordinates(event)
+
+    const x = (clientX / window.innerWidth) * 2 - 1
+    const y = -(clientY / window.innerHeight) * 2 + 1
     const point = new THREE.Vector2(x, y)
 
     this._raycaster.setFromCamera(point, this._camera)
@@ -411,6 +415,25 @@ export class ThreeGlobe {
     return null
   }
 
+  getEventCoordinates(event) {
+    let clientX = 0
+    let clientY = 0
+
+    if (event.type === 'touchmove' || event.type === 'touchstart') {
+      clientX = event.touches[0].clientX
+      clientY = event.touches[0].clientY
+    } else if (event.type === 'touchend') {
+      // At the end of a touch event not coordinates are provided in the event
+      clientX = this._mouse.x
+      clientY = -this._mouse.y
+    } else {
+      clientX = event.clientX
+      clientY = event.clientY
+    }
+
+    return { clientX, clientY }
+  }
+
   onMouseMove = (event) => {
     const userIndex = this.getUserIndexAtMouse(event)
     if (userIndex !== this._hoveredUserIndex) {
@@ -422,8 +445,10 @@ export class ThreeGlobe {
 
     if (!this._mouseDown) return
 
-    this._mouse.x = event.clientX
-    this._mouse.y = -event.clientY
+    const { clientX, clientY } = this.getEventCoordinates(event)
+
+    this._mouse.x = clientX
+    this._mouse.y = -clientY
 
     const zoomDamp = this._distance / 1000
 
@@ -451,8 +476,10 @@ export class ThreeGlobe {
   onMouseUp(event) {
     this._mouseDown = false
 
-    const x = event.clientX
-    const y = -event.clientY
+    const { clientX, clientY } = this.getEventCoordinates(event)
+
+    const x = clientX
+    const y = -clientY
     const diffX = x - this._mouseOnDown.x
     const diffY = y - this._mouseOnDown.y
     const dist = Math.sqrt(diffX * diffX + diffY * diffY)

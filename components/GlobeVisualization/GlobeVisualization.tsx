@@ -125,6 +125,9 @@ export const GlobeVisualization: React.FC = () => {
         onMouseUpCapture={onMouseUp}
         onMouseOutCapture={onMouseOut}
         onMouseMoveCapture={onMouseMove}
+        onTouchMoveCapture={onMouseMove}
+        onTouchStartCapture={onMouseDown}
+        onTouchEndCapture={onMouseUp}
       />
     </div>
   )
