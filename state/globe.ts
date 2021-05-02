@@ -7,7 +7,8 @@ import type { ThreeGlobe } from 'components/GlobeVisualization/ThreeGlobe'
 
 function useGlobe() {
   const [users, setUsers] = React.useState<User[]>([])
-  const [focusedUser, setFocusedUser] = React.useState<User>(null)
+  const [isGlobeMode, setGlobeMode] = React.useState(true)
+  const [focusedUser, setFocusedUser] = React.useState<User>()
   const [hoveredUser, setHoveredUser] = React.useState<User>(null)
   const [filterPublicOnly, setFilterPublicOnly] = React.useState<boolean>(false)
   const infoModal = useDisclosure()
@@ -37,6 +38,9 @@ function useGlobe() {
 
     filterPublicOnly,
     setFilterPublicOnly,
+
+    isGlobeMode,
+    setGlobeMode,
 
     globeRef,
 

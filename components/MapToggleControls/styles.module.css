@@ -1,0 +1,62 @@
+.container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  user-select: none;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  color: #000;
+  user-select: none;
+  outline: none;
+}
+
+.control.active {
+  background: #1fa8e4;
+  color: #fff;
+}
+
+.control.active:hover {
+  background: #1b91c5;
+}
+
+.control:hover {
+  background: rgb(247, 247, 247);
+}
+
+.control:active {
+  background: rgb(230, 230, 230);
+}
+
+.zoom .control:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.zoom .control:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.info .control,
+.reset .control {
+  border-radius: 10px;
+}
+
+.spacer {
+  height: 1px;
+  width: 80%;
+  background: rgba(0, 0, 0, 0.1);
+}

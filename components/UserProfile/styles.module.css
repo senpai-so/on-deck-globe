@@ -7,12 +7,15 @@
   top: 0;
   right: 20px;
   height: 100vh;
+  pointer-events: none;
 }
 
 .content {
   max-width: 300px;
   padding: 16px;
   color: #000;
+  pointer-events: all;
+  user-select: none;
 }
 
 .content h3 {

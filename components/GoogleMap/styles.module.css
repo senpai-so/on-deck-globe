@@ -1,0 +1,14 @@
+.userMarker {
+  position: relative;
+  top: -32px;
+  left: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+}
+
+.hover {
+  border: 4px solid #1fa8e4;
+  cursor: pointer;
+}

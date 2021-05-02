@@ -1,0 +1,37 @@
+import React from 'react'
+import cs from 'classnames'
+
+import { Tooltip } from '@chakra-ui/react'
+import { FaGlobeAmericas } from 'react-icons/fa'
+import { FiMap } from 'react-icons/fi'
+
+import { Globe } from 'state/globe'
+import { Paper } from '../Paper/Paper'
+
+import styles from './styles.module.css'
+
+export const MapToggleControls = () => {
+  const { isGlobeMode, setGlobeMode } = Globe.useContainer()
+
+  const onClickToggleGlobeMode = React.useCallback(() => {
+    setGlobeMode((isGlobeMode) => !isGlobeMode)
+  }, [setGlobeMode])
+
+  const filterLabel = isGlobeMode ? 'View Google Map' : 'View Globe'
+
+  return (
+    <div className={styles.container}>
+      <Paper className={cs(styles.content, styles.reset)}>
+        <Tooltip label={filterLabel} aria-label={filterLabel} placement='left'>
+          <button
+            aria-label={filterLabel}
+            className={cs(styles.control)}
+            onClick={onClickToggleGlobeMode}
+          >
+            {isGlobeMode ? <FiMap /> : <FaGlobeAmericas />}
+          </button>
+        </Tooltip>
+      </Paper>
+    </div>
+  )
+}

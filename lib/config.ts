@@ -6,6 +6,9 @@ export const domain = getEnv('DOMAIN', 'ondeckglobe.com')
 export const port = getEnv('PORT', '3000')
 export const host = isDev ? `http://localhost:${port}` : `https://${domain}`
 
+export const googleMapsApiKey =
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? null
+
 export const apiBaseUrl = `${host}/api`
 
 export const api = {

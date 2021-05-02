@@ -5,10 +5,12 @@ import { getUsers } from 'lib/get-users'
 import { Layout } from 'components/Layout/Layout'
 import { QueryParamProvider } from 'components/QueryParamProvider/QueryParamProvider'
 import { GlobeVisualization } from 'components/GlobeVisualization/GlobeVisualization'
+import { GoogleMap } from 'components/GoogleMap/GoogleMap'
 import { ZoomControls } from 'components/ZoomControls/ZoomControls'
-import { Globe } from 'state/globe'
 import { UserProfile } from 'components/UserProfile/UserProfile'
 import { PublicPane } from 'components/PublicPane/PublicPane'
+import { MapToggleControls } from 'components/MapToggleControls/MapToggleControls'
+import { Globe } from 'state/globe'
 
 import styles from 'styles/index.module.css'
 
@@ -36,7 +38,12 @@ export default function HomePage({ users }: { users: User[] }) {
 }
 
 function GlobePage({ users }: { users: User[] }) {
-  const { setUsers, focusedUser, filterPublicOnly } = Globe.useContainer()
+  const {
+    setUsers,
+    focusedUser,
+    filterPublicOnly,
+    isGlobeMode
+  } = Globe.useContainer()
   const [hasMounted, setHasMounted] = React.useState(false)
   React.useEffect(() => {
     setHasMounted(true)
@@ -59,11 +66,15 @@ function GlobePage({ users }: { users: User[] }) {
         <>
           <GlobeVisualization />
 
+          <GoogleMap />
+
           {focusedUser && <UserProfile user={focusedUser} />}
 
-          <ZoomControls />
+          {isGlobeMode && <ZoomControls />}
 
           <PublicPane />
+
+          <MapToggleControls />
         </>
       )}
     </div>

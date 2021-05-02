@@ -361,6 +361,10 @@ export class ThreeGlobe {
   }
 
   destroy() {
+    this.pause()
+  }
+
+  pause() {
     if (this._rafHandle) {
       cancelAnimationFrame(this._rafHandle)
       this._rafHandle = null
@@ -389,6 +393,10 @@ export class ThreeGlobe {
   }
 
   getUserIndexAtMouse(event): number | null {
+    if (!this._particles) {
+      return null
+    }
+
     const x = (event.clientX / window.innerWidth) * 2 - 1
     const y = -(event.clientY / window.innerHeight) * 2 + 1
     const point = new THREE.Vector2(x, y)
@@ -444,9 +452,12 @@ export class ThreeGlobe {
 
     if (dist < 3) {
       const userIndex = this.getUserIndexAtMouse(event)
+
       if (userIndex >= 0) {
         const user = this._users[userIndex]
         this._callbacks.onClickUser?.(user)
+      } else {
+        this._callbacks.onClickUser?.(null)
       }
     }
   }
@@ -502,6 +513,8 @@ export class ThreeGlobe {
     console.log('goTolocation', { lat, lng, phi, theta })
     this._target.x = theta
     this._target.y = phi
+
+    this._target.y = Math.max(0, Math.min(Math.PI, this._target.y))
   }
 
   render() {

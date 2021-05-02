@@ -5,6 +5,7 @@ import { Globe } from 'state/globe'
 
 // import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator'
 import { ThreeGlobe } from './ThreeGlobe'
+
 import styles from './styles.module.css'
 
 export const GlobeVisualization: React.FC = () => {
@@ -13,7 +14,8 @@ export const GlobeVisualization: React.FC = () => {
     globeRef,
     hoveredUser,
     setHoveredUser,
-    setFocusedUser
+    setFocusedUser,
+    isGlobeMode
   } = Globe.useContainer()
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
@@ -40,8 +42,16 @@ export const GlobeVisualization: React.FC = () => {
   }, [globeRef, width, height])
 
   React.useEffect(() => {
-    globeRef.current?.setUsers(users)
-  }, [globeRef, users])
+    globeRef.current?.setUsers(isGlobeMode ? users : [])
+  }, [globeRef, users, isGlobeMode])
+
+  React.useEffect(() => {
+    if (isGlobeMode) {
+      globeRef.current?.animate()
+    } else {
+      globeRef.current?.pause()
+    }
+  }, [globeRef, isGlobeMode])
 
   React.useEffect(() => {
     globeRef.current._callbacks = {
@@ -86,18 +96,12 @@ export const GlobeVisualization: React.FC = () => {
     [globeRef]
   )
 
-  const onClick = React.useCallback(
-    (event) => {
-      globeRef.current?.onClick(event)
-    },
-    [globeRef]
-  )
-
   const wrapperStyle = React.useMemo(
     () => ({
-      cursor: hoveredUser ? 'pointer' : isMouseDown ? 'move' : 'auto'
+      cursor: hoveredUser ? 'pointer' : isMouseDown ? 'move' : 'auto',
+      display: isGlobeMode ? 'block' : 'none'
     }),
-    [isMouseDown, hoveredUser]
+    [isMouseDown, hoveredUser, isGlobeMode]
   )
 
   React.useLayoutEffect(() => {
@@ -121,7 +125,6 @@ export const GlobeVisualization: React.FC = () => {
         onMouseUpCapture={onMouseUp}
         onMouseOutCapture={onMouseOut}
         onMouseMoveCapture={onMouseMove}
-        onClick={onClick}
       />
     </div>
   )
