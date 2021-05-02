@@ -58,10 +58,13 @@ export const GlobeVisualization: React.FC = () => {
     [globeRef, setMouseDown]
   )
 
-  const onMouseUp = React.useCallback(() => {
-    globeRef.current?.onMouseUp()
-    setMouseDown(globeRef.current?._mouseDown)
-  }, [globeRef, setMouseDown])
+  const onMouseUp = React.useCallback(
+    (event) => {
+      globeRef.current?.onMouseUp(event)
+      setMouseDown(globeRef.current?._mouseDown)
+    },
+    [globeRef, setMouseDown]
+  )
 
   const onMouseMove = React.useCallback(
     (event) => {

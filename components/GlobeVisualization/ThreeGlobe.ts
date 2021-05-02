@@ -433,8 +433,22 @@ export class ThreeGlobe {
     this._target.y = Math.max(0, Math.min(Math.PI, this._target.y))
   }
 
-  onMouseUp() {
+  onMouseUp(event) {
     this._mouseDown = false
+
+    const x = event.clientX
+    const y = -event.clientY
+    const diffX = x - this._mouseOnDown.x
+    const diffY = y - this._mouseOnDown.y
+    const dist = Math.sqrt(diffX * diffX + diffY * diffY)
+
+    if (dist < 3) {
+      const userIndex = this.getUserIndexAtMouse(event)
+      if (userIndex >= 0) {
+        const user = this._users[userIndex]
+        this._callbacks.onClickUser?.(user)
+      }
+    }
   }
 
   onMouseOut() {
@@ -448,11 +462,7 @@ export class ThreeGlobe {
   }
 
   onClick(event) {
-    const userIndex = this.getUserIndexAtMouse(event)
-    if (userIndex >= 0) {
-      const user = this._users[userIndex]
-      this._callbacks.onClickUser?.(user)
-    }
+    // no-op
   }
 
   onDocumentKeyDown(event: KeyboardEvent) {
