@@ -6,12 +6,18 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Globe } from 'state/globe'
 import { User } from 'lib/types'
 
+// TODO: switch to using headless
+// import useAutocomplete from '@material-ui/lab/useAutocomplete'
+
 const useStyles = makeStyles({
   root: {
     width: 400,
     '& .MuiInputLabel-shrink': {
       display: 'none',
       opacity: 0
+    },
+    '& label': {
+      transform: 'translate(18px, 16px) scale(1)'
     }
   },
   inputRoot: {
@@ -20,10 +26,12 @@ const useStyles = makeStyles({
     // background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     background: '#fff',
     color: '#000',
+    paddingTop: '4px !important',
+    paddingBottom: '4px !important',
     // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
     '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
       // Default left padding is 6px
-      paddingLeft: 26
+      paddingLeft: 12
     },
     '& .MuiOutlinedInput-notchedOutline': {
       border: 'none'
