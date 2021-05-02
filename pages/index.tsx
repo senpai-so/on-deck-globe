@@ -1,5 +1,6 @@
 import React from 'react'
 import cs from 'classnames'
+import { useLockBodyScroll, useMedia } from 'react-use'
 
 import { User } from 'lib/types'
 import { getUsers } from 'lib/get-users'
@@ -49,6 +50,7 @@ function GlobePage({ users }: { users: User[] }) {
   React.useEffect(() => {
     setHasMounted(true)
   }, [])
+  const isMobile = useMedia('(max-width: 480px)', false)
 
   React.useEffect(() => {
     if (!users?.length) return
@@ -60,6 +62,8 @@ function GlobePage({ users }: { users: User[] }) {
       setUsers(users)
     }
   }, [users, setUsers, filterPublicOnly])
+
+  useLockBodyScroll(isMobile)
 
   return (
     <div className={cs(styles.page, isGlobeMode && styles.globe)}>
