@@ -19,6 +19,12 @@ export const Head: React.FC<{
 }) => {
   return (
     <NextHead>
+      <meta
+        name='viewport'
+        content='width=device-width, user-scalable=no'
+        key='viewport'
+      />
+
       <link rel='shortcut icon' href='/favicon.png' />
 
       <meta name='twitter:title' content={title} />

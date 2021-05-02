@@ -11,7 +11,7 @@ import { User } from 'lib/types'
 
 const useStyles = makeStyles({
   root: {
-    width: 400,
+    width: '400px',
     '& .MuiInputLabel-shrink': {
       display: 'none',
       opacity: 0

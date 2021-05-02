@@ -6,3 +6,16 @@
 
   pointer-events: all;
 }
+
+@media (max-width: 700px) {
+  .search {
+    order: 3;
+    width: 100%;
+    flex: initial;
+    padding-top: 0.5em;
+  }
+
+  .search > div {
+    width: 100% !important;
+  }
+}
