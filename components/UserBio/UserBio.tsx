@@ -1,6 +1,6 @@
 import React from 'react'
 import cs from 'classnames'
-import Linkify from 'react-linkify'
+import Linkify from 'react-linkify-twitter'
 
 import { User } from 'lib/types'
 

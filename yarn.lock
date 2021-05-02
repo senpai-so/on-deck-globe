@@ -5557,10 +5557,10 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-linkify@^1.0.0-alpha:
-  version "1.0.0-alpha"
-  resolved "https://registry.yarnpkg.com/react-linkify/-/react-linkify-1.0.0-alpha.tgz#b391c7b88e3443752fafe76a95ca4434e82e70d5"
-  integrity sha512-7gcIUvJkAXXttt1fmBK9cwn+1jTa4hbKLGCZ9J1U6EOkyb2/+LKL1Z28d9rtDLMnpvImlNlLPdTPooorl5cpmg==
+react-linkify-twitter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-linkify-twitter/-/react-linkify-twitter-1.0.0.tgz#6c732321e2ee21dc66eb55359a42497375d1e5cb"
+  integrity sha512-ZcUMEg4lBCG7OxxstU4fyyGU4xDGXzYAuHk33VCuwxr0OFk4dR0Fba3r5XlV7tiTZDcmJYafliWg8q+do1F+Qg==
   dependencies:
     linkify-it "^2.0.3"
     tlds "^1.199.0"
