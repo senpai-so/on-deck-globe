@@ -1,4 +1,5 @@
 import React from 'react'
+import cs from 'classnames'
 
 import { User } from 'lib/types'
 import { getUsers } from 'lib/get-users'
@@ -61,7 +62,7 @@ function GlobePage({ users }: { users: User[] }) {
   }, [users, setUsers, filterPublicOnly])
 
   return (
-    <div className={styles.page}>
+    <div className={cs(styles.page, isGlobeMode && styles.globe)}>
       {hasMounted && (
         <>
           <GlobeVisualization />

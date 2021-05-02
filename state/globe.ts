@@ -33,6 +33,26 @@ function useGlobe() {
     },
     [setFocusedUser, globeRef]
   )
+
+  const getUsersInBounds = React.useCallback(
+    (bounds: any) => {
+      return users.filter((user) => {
+        const { lat, lng } = user
+        if (
+          lat < bounds.sw.lat ||
+          lat > bounds.ne.lat ||
+          lng < bounds.nw.lng ||
+          lng > bounds.se.lng
+        ) {
+          return false
+        }
+
+        return true
+      })
+    },
+    [users]
+  )
+
   const onToggleGlobeMode = React.useCallback(() => {
     setGlobeMode((isGlobeMode) => {
       if (isGlobeMode) {
@@ -40,6 +60,7 @@ function useGlobe() {
         console.log('map mode', center)
 
         if (center) {
+          // TODO: if there are no users in bounds, then zoom out
           setCenter(center)
         }
       }
@@ -66,6 +87,8 @@ function useGlobe() {
 
     center,
     setCenter,
+
+    getUsersInBounds,
 
     globeRef,
 

@@ -5,3 +5,14 @@
   width: 100vw;
   height: 100vh;
 }
+
+/* .page div:nth-child(2) {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+} */
+
+.globe > div:nth-child(2) {
+  visibility: hidden;
+  pointer-events: none;
+}

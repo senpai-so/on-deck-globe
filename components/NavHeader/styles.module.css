@@ -23,10 +23,12 @@
 
 .brand {
   display: flex;
+  justify-content: center;
   align-items: center;
   font-weight: 700;
   color: var(--text-h-color);
   pointer-events: all;
+  width: 20%;
 }
 
 .logo {
@@ -36,7 +38,9 @@
 
 .nav {
   display: flex;
+  justify-content: center;
   pointer-events: all;
+  width: 20%;
 }
 
 .nav a {

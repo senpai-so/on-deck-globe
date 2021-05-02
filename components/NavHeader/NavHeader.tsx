@@ -14,14 +14,15 @@ export const NavHeader: React.FC<{ full?: boolean }> = ({ full }) => {
             On Deck Globe
           </a>
         </Link>
-        {!full && <UserSearch />}
-      </div>
 
-      <nav className={styles.nav}>
-        <Link href='/about'>
-          <a className={styles.link}>About</a>
-        </Link>
-      </nav>
+        {!full && <UserSearch />}
+
+        <nav className={styles.nav}>
+          <Link href='/about'>
+            <a className={styles.link}>About</a>
+          </Link>
+        </nav>
+      </div>
     </header>
   )
 }

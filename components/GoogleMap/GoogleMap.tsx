@@ -17,21 +17,21 @@ const googleMapsKey = { key: googleMapsApiKey }
 
 export const GoogleMap: React.FC = () => {
   const {
-    users,
+    getUsersInBounds,
     focusedUser,
     setFocusedUser,
     isGlobeMode,
     center,
     setCenter
   } = Globe.useContainer()
+
+  const [zoom, setZoom] = React.useState(9)
   const [bounds, setBounds] = React.useState({
     nw: { lat: 90, lng: -180 },
     ne: { lat: 90, lng: 180 },
     se: { lat: -90, lng: 180 },
     sw: { lat: -90, lng: -180 }
   })
-
-  const [zoom, setZoom] = React.useState(10)
 
   const onChildClick = React.useCallback(
     (event, child) => {
@@ -63,6 +63,8 @@ export const GoogleMap: React.FC = () => {
   //   }
   // }, [zoom])
 
+  const users = getUsersInBounds(bounds)
+
   return (
     <GoogleMapReact
       bootstrapURLKeys={googleMapsKey}
@@ -76,18 +78,13 @@ export const GoogleMap: React.FC = () => {
       {isGlobeMode
         ? null
         : users.map((user) => {
-            const { lat, lng } = user
-            if (
-              lat < bounds.sw.lat ||
-              lat > bounds.ne.lat ||
-              lng < bounds.nw.lng ||
-              lng > bounds.se.lng
-            ) {
-              return null
-            }
-
             return (
-              <UserMarker key={user.userId} lat={lat} lng={lng} user={user} />
+              <UserMarker
+                key={user.userId}
+                lat={user.lat}
+                lng={user.lng}
+                user={user}
+              />
             )
           })}
     </GoogleMapReact>
