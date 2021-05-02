@@ -2,7 +2,7 @@ import React from 'react'
 import NextHead from 'next/head'
 
 const siteName = 'On Deck Globe'
-const defaultSocialImage = null
+const defaultSocialImage = 'https://ondeckglobe.com/social.jpg'
 
 export const Head: React.FC<{
   title?: string
@@ -14,7 +14,7 @@ export const Head: React.FC<{
   title = siteName,
   domain = 'ondeckglobe.com',
   twitter = 'ondeckglobe',
-  description = 'On Deck Globe',
+  description = 'Shaping the world together via On Deck 💪',
   socialImage = defaultSocialImage
 }) => {
   return (
