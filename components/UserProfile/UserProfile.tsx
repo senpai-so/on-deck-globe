@@ -106,11 +106,9 @@ export const UserProfile = ({ user }: { user: User }) => {
               .
             </p>
 
-            {isGlobeMode && (
-              <Button onClick={onToggleGlobeMode} className={styles.button}>
-                {isGlobeMode ? 'View on 2D Map' : 'View on 3D Globe'}
-              </Button>
-            )}
+            <Button onClick={onToggleGlobeMode} className={styles.button}>
+              {isGlobeMode ? 'View on 2D Map' : 'View on 3D Globe'}
+            </Button>
           </div>
         )}
       </Paper>
