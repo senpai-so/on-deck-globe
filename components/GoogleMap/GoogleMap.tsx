@@ -40,6 +40,11 @@ export const GoogleMap: React.FC = () => {
     [setFocusedUser]
   )
 
+  // Handle deselection of a UserProfile when clicking on the map (outside of a Marker)
+  const onClick = React.useCallback(() => {
+    setFocusedUser()
+  }, [setFocusedUser])
+
   const onChange = React.useCallback(
     ({ center, zoom, bounds }) => {
       setCenter(center)
@@ -73,6 +78,7 @@ export const GoogleMap: React.FC = () => {
       hoverDistance={40}
       options={googleMapOptions}
       onChildClick={onChildClick}
+      onClick={onClick}
       onChange={onChange}
     >
       {isGlobeMode
