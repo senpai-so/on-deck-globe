@@ -2,9 +2,9 @@ import React from 'react'
 import cs from 'classnames'
 
 import { Tooltip } from '@chakra-ui/react'
-import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlineMinus, AiOutlinePlus, AiOutlineFilter } from 'react-icons/ai'
 import { MdZoomOutMap } from 'react-icons/md'
-import { FaQuestion } from 'react-icons/fa'
+// import { FaQuestion } from 'react-icons/fa'
 
 import { Globe } from 'state/globe'
 import { Paper } from '../Paper/Paper'
@@ -12,7 +12,12 @@ import { Paper } from '../Paper/Paper'
 import styles from './styles.module.css'
 
 export const ZoomControls = () => {
-  const { globeRef, infoModal } = Globe.useContainer()
+  const {
+    globeRef,
+    // infoModal,
+    setFilterPublicOnly,
+    filterPublicOnly
+  } = Globe.useContainer()
 
   const onClickZoomToFit = React.useCallback(() => {
     globeRef.current?.zoom()
@@ -26,9 +31,17 @@ export const ZoomControls = () => {
     globeRef.current?.zoom(-100)
   }, [globeRef])
 
+  const onClickFilterPublicOnly = React.useCallback(() => {
+    setFilterPublicOnly((filterPublicOnly) => !filterPublicOnly)
+  }, [setFilterPublicOnly])
+
+  const filterLabel = filterPublicOnly
+    ? 'View all users'
+    : 'View public users only'
+
   return (
     <div className={styles.container}>
-      <Paper className={cs(styles.content, styles.info)}>
+      {/* <Paper className={cs(styles.content, styles.info)}>
         <Tooltip label='Info' aria-label='Info' placement='left'>
           <button
             aria-label='Info'
@@ -36,6 +49,18 @@ export const ZoomControls = () => {
             onClick={infoModal.onOpen}
           >
             <FaQuestion />
+          </button>
+        </Tooltip>
+      </Paper> */}
+
+      <Paper className={cs(styles.content, styles.reset)}>
+        <Tooltip label={filterLabel} aria-label={filterLabel} placement='left'>
+          <button
+            aria-label={filterLabel}
+            className={cs(styles.control, filterPublicOnly && styles.active)}
+            onClick={onClickFilterPublicOnly}
+          >
+            <AiOutlineFilter />
           </button>
         </Tooltip>
       </Paper>

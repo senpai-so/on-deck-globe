@@ -6,8 +6,6 @@ import * as utils from './utils'
 import * as shaders from './shaders'
 import { Particle, ParticleSystem } from './particle'
 
-const PI_HALF = Math.PI / 2
-
 interface Vec2 {
   x: number
   y: number
@@ -164,8 +162,9 @@ export class ThreeGlobe {
     // color
 
     const sprite = new THREE.TextureLoader().load('/sprite.png')
-    sprite.minFilter = THREE.LinearMipMapLinearFilter
-    sprite.magFilter = THREE.LinearMipMapLinearFilter
+    // sprite.minFilter = THREE.LinearFilter
+    // sprite.magFilter = THREE.LinearFilter
+
     // const material = new THREE.PointsMaterial({
     //   size: 50,
     //   map: sprite,
@@ -413,7 +412,6 @@ export class ThreeGlobe {
     if (userIndex !== this._hoveredUserIndex) {
       this._hoveredUserIndex = userIndex
 
-      console.log('userIndex', userIndex, this._users[userIndex])
       const user = userIndex !== null ? this._users[userIndex] : null
       this._callbacks.onHoverUser?.(user)
     }
@@ -432,7 +430,7 @@ export class ThreeGlobe {
       this._targetOnDown.y +
       (this._mouse.y - this._mouseOnDown.y) * 0.005 * zoomDamp
 
-    this._target.y = Math.max(-PI_HALF, Math.min(PI_HALF, this._target.y))
+    this._target.y = Math.max(0, Math.min(Math.PI, this._target.y))
   }
 
   onMouseUp() {
@@ -488,13 +486,10 @@ export class ThreeGlobe {
   }
 
   goToLocation(lat: number, lng: number) {
-    console.log('goToLocation', lat, lng)
-
     // Convert a geo location to a target vector on the globe
     const { phi, theta } = utils.latLngToSpherical({ lat, lng })
-    // const pos = utils.sphericalToWorld({ phi, theta })
 
-    console.log({ lat, lng, phi, theta })
+    console.log('goTolocation', { lat, lng, phi, theta })
     this._target.x = theta
     this._target.y = phi
   }

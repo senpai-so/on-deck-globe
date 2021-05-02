@@ -25,6 +25,15 @@
   outline: none;
 }
 
+.control.active {
+  background: #1fa8e4;
+  color: #fff;
+}
+
+.control.active:hover {
+  background: #1b91c5;
+}
+
 .control:hover {
   background: rgb(247, 247, 247);
 }
