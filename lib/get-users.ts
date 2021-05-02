@@ -45,6 +45,7 @@ export const getUsers = async (): Promise<User[]> => {
     }
   })
 
+  // ensure that the public users are at the end, so they're drawn on top
   users.sort(
     (a, b) =>
       ((a.isPublic as unknown) as number) - ((b.isPublic as unknown) as number)
@@ -53,7 +54,6 @@ export const getUsers = async (): Promise<User[]> => {
   const t = users.find((u) => u.userId === tId)
   users = users.filter((u) => u.userId !== tId)
   users = users.concat(t ? [t] : [])
-  console.log(JSON.stringify(users, null, 2))
 
   return users
 }
