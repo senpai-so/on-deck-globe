@@ -8,6 +8,8 @@ import { Globe } from 'state/globe'
 
 import { Paper } from '../Paper/Paper'
 import { Button } from '../Button/Button'
+import { UserBio } from '../UserBio/UserBio'
+
 import styles from './styles.module.css'
 
 export const UserProfile = ({ user }: { user: User }) => {
@@ -82,6 +84,8 @@ export const UserProfile = ({ user }: { user: User }) => {
                 )}
               </div>
             )}
+
+            {user.twitterBio && <UserBio user={user} className={styles.bio} />}
 
             <Button
               href={`https://community.beondeck.com/user/${user.userId}`}

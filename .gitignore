@@ -37,4 +37,3 @@ yarn-error.log*
 
 # application-specific
 data/
-bin/

@@ -15,7 +15,6 @@
   padding: 16px;
   color: #000;
   pointer-events: all;
-  user-select: none;
 }
 
 .content h3 {
@@ -61,7 +60,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  width: calc(min(160px, 100%));
+  width: calc(min(140px, 100%));
   margin: 12px auto;
 }
 
@@ -94,4 +93,8 @@
 
 .button:last-child {
   margin-bottom: 0;
+}
+
+.bio {
+  margin: 12px 0;
 }

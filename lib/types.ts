@@ -5,6 +5,7 @@ export interface User {
   lat?: number
   lng?: number
   fellow?: Fellow
+  twitterBio?: string
 }
 
 export interface Fellow {

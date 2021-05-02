@@ -1,0 +1,14 @@
+.bio {
+  flex: 1;
+  font-size: 0.9em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.bio a {
+  color: #007099;
+}
+
+.bio a:hover {
+  color: #00afed;
+}
