@@ -39,7 +39,17 @@
 }
 
 .notPublic {
+  display: flex;
+  flex-direction: column;
+}
+
+.notPublic p {
   font-size: 0.9em;
+}
+
+.notPublic > div {
+  align-self: center;
+  margin: 12px auto 0;
 }
 
 .notPublic a {
@@ -75,4 +85,13 @@
   position: relative;
   top: -1px;
   left: 4px;
+}
+
+.button {
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.button:last-child {
+  margin-bottom: 0;
 }

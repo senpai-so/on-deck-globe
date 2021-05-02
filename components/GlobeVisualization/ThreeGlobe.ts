@@ -289,59 +289,55 @@ export class ThreeGlobe {
     }
 
     function updateParticles() {
-      for (let userIndex = 0; userIndex < particleSystems.length; ++userIndex) {
-        const particleSystem = particleSystems[userIndex]
-        // const vertices = particleSystem.geometry.attributes.position
-        //   .array as Float32Array
-        const sizes = particleSystem.geometry.attributes.size
-          .array as Float32Array
+      const particleSystem = particleSystems[0]
+      const sizes = particleSystem.geometry.attributes.size
+        .array as Float32Array
 
-        for (let i = 0; i < particleSystem.particles.length; ++i) {
-          const isHovered = i === this._hoveredUserIndex
-          const particle = particleSystem.particles[i]
+      for (let i = 0; i < particleSystem.particles.length; ++i) {
+        const isHovered = i === this._hoveredUserIndex
+        const particle = particleSystem.particles[i]
 
-          if (particle.main) {
-            // particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
-            // particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
-            // particle.acceleration[2] += random.float(-0.00000001, 0.000001)
+        if (particle.main) {
+          // particle.acceleration[0] += random.float(-0.0000001, 0.0000001)
+          // particle.acceleration[1] += random.float(-0.0000001, 0.0000001)
+          // particle.acceleration[2] += random.float(-0.00000001, 0.000001)
 
-            // particle.velocity[0] += particle.acceleration[0]
-            // particle.velocity[1] += particle.acceleration[1]
-            // particle.velocity[2] += particle.acceleration[2]
+          // particle.velocity[0] += particle.acceleration[0]
+          // particle.velocity[1] += particle.acceleration[1]
+          // particle.velocity[2] += particle.acceleration[2]
 
-            // particle.phi += particle.velocity[0]
-            // particle.theta += particle.velocity[1]
-            // particle.radius += particle.velocity[2]
+          // particle.phi += particle.velocity[0]
+          // particle.theta += particle.velocity[1]
+          // particle.radius += particle.velocity[2]
 
-            // particle.radius = particle.radius0 + random.float(-1, 2)
-            // const x =
-            //   particle.radius *
-            //   Math.sin(particle.phi) *
-            //   Math.cos(particle.theta)
-            // const y = particle.radius * Math.cos(particle.phi)
-            // const z =
-            //   particle.radius *
-            //   Math.sin(particle.phi) *
-            //   Math.sin(particle.theta)
+          // particle.radius = particle.radius0 + random.float(-1, 2)
+          // const x =
+          //   particle.radius *
+          //   Math.sin(particle.phi) *
+          //   Math.cos(particle.theta)
+          // const y = particle.radius * Math.cos(particle.phi)
+          // const z =
+          //   particle.radius *
+          //   Math.sin(particle.phi) *
+          //   Math.sin(particle.theta)
 
-            // vertices[3 * i + 0] = x
-            // vertices[3 * i + 1] = y
-            // vertices[3 * i + 2] = z
+          // vertices[3 * i + 0] = x
+          // vertices[3 * i + 1] = y
+          // vertices[3 * i + 2] = z
 
-            sizes[i] =
-              particle.size *
-              // (Math.min(25, particle.age) / 25) *
-              (isHovered ? 2 : 1)
+          sizes[i] =
+            particle.size *
+            // (Math.min(25, particle.age) / 25) *
+            (isHovered ? 2 : 1)
 
-            // if (particle.age-- <= 0) {
-            //   spawnParticle(particleSystem, i)
-            // }
-          }
+          // if (particle.age-- <= 0) {
+          //   spawnParticle(particleSystem, i)
+          // }
         }
-
-        // particleSystem.geometry.attributes.position.needsUpdate = true
-        particleSystem.geometry.attributes.size.needsUpdate = true
       }
+
+      // particleSystem.geometry.attributes.position.needsUpdate = true
+      particleSystem.geometry.attributes.size.needsUpdate = true
     }
 
     this._updateParticles = updateParticles

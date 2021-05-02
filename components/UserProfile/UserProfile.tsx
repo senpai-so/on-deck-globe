@@ -4,12 +4,15 @@ import { FaTwitter, FaLinkedin } from 'react-icons/fa'
 
 import { signupLink } from 'lib/config'
 import { User } from 'lib/types'
+import { Globe } from 'state/globe'
 
 import { Paper } from '../Paper/Paper'
 import { Button } from '../Button/Button'
 import styles from './styles.module.css'
 
 export const UserProfile = ({ user }: { user: User }) => {
+  const { isGlobeMode, onToggleGlobeMode } = Globe.useContainer()
+
   if (!user) return null
 
   const userData = user.fellow
@@ -84,17 +87,30 @@ export const UserProfile = ({ user }: { user: User }) => {
               href={`https://community.beondeck.com/user/${user.userId}`}
               target='_blank'
               rel='noreferrer noopener'
+              className={styles.button}
             >
               View On Deck Profile
+            </Button>
+
+            <Button onClick={onToggleGlobeMode} className={styles.button}>
+              {isGlobeMode ? 'View on 2D Map' : 'View on 3D Globe'}
             </Button>
           </React.Fragment>
         ) : (
           <div className={styles.notPublic}>
-            This On Deck Fellow is private. If this is you, you can{' '}
-            <a href={signupLink} target='_blank' rel='noreferrer noopener'>
-              make your profile public here
-            </a>
-            .
+            <p>
+              This On Deck Fellow is private. If this is you, you can{' '}
+              <a href={signupLink} target='_blank' rel='noreferrer noopener'>
+                make your profile public here
+              </a>
+              .
+            </p>
+
+            {isGlobeMode && (
+              <Button onClick={onToggleGlobeMode} className={styles.button}>
+                {isGlobeMode ? 'View on 2D Map' : 'View on 3D Globe'}
+              </Button>
+            )}
           </div>
         )}
       </Paper>

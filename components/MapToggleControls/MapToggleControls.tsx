@@ -13,7 +13,7 @@ import styles from './styles.module.css'
 export const MapToggleControls = () => {
   const { isGlobeMode, onToggleGlobeMode } = Globe.useContainer()
 
-  const filterLabel = isGlobeMode ? 'View Google Map' : 'View Globe'
+  const filterLabel = isGlobeMode ? 'View 2D Map' : 'View 3D Globe'
 
   return (
     <div className={styles.container}>
