@@ -3,7 +3,8 @@
   background-image: url('/bg.jpg');
   background-size: cover;
   width: 100vw;
-  height: 100vh;
+  /* Mobile viewport optimizations */
+  flex: 1;
 }
 
 /* .page div:nth-child(2) {

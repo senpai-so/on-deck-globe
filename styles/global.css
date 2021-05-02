@@ -17,15 +17,26 @@ a:hover {
   border-image-slice: 1;
 }
 
+/* Mobile viewport optimizations */
+body {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
 body,
 html {
   padding: 0;
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+}
+
+/* Mobile viewport optimizations */
+#__next {
+  min-height: 100%;
+  display: flex;
 }
 
 :root {
