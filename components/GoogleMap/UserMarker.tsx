@@ -23,7 +23,12 @@ export const UserMarker: any = ({
     <BlockImage
       src={user.fellow?.imageUrl || defaultProfileImageUrl}
       fallback={defaultProfileImageUrl}
-      className={cs(styles.userMarker, className, $hover && styles.hover)}
+      className={cs(
+        styles.userMarker,
+        className,
+        $hover && styles.hover,
+        user.isPublic && styles.public
+      )}
       style={style}
     />
   )

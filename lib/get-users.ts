@@ -14,7 +14,7 @@ export const getUsers = async (): Promise<User[]> => {
     users = docs.map((doc) => db.getSnapshot<User>(doc))
   }
 
-  return users.map((user) => {
+  users = users.map((user) => {
     // ensure that we don't leak private user data if fellows haven't opted in
     if (!user.isPublic) {
       return {
@@ -35,4 +35,11 @@ export const getUsers = async (): Promise<User[]> => {
       }
     }
   })
+
+  users.sort(
+    (a, b) =>
+      ((a.isPublic as unknown) as number) - ((b.isPublic as unknown) as number)
+  )
+
+  return users
 }

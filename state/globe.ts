@@ -5,10 +5,18 @@ import { User } from 'lib/types'
 
 import type { ThreeGlobe } from 'components/GlobeVisualization/ThreeGlobe'
 
+const defaultCenter = {
+  lng: -74.016915901860472,
+  lat: 40.69555921429896
+}
+
 function useGlobe() {
   const [users, setUsers] = React.useState<User[]>([])
+
   const [isGlobeMode, setGlobeMode] = React.useState(true)
   const [focusedUser, setFocusedUser] = React.useState<User>()
+  const [center, setCenter] = React.useState(defaultCenter)
+
   const [hoveredUser, setHoveredUser] = React.useState<User>(null)
   const [filterPublicOnly, setFilterPublicOnly] = React.useState<boolean>(false)
   const infoModal = useDisclosure()
@@ -25,6 +33,20 @@ function useGlobe() {
     },
     [setFocusedUser, globeRef]
   )
+  const onToggleGlobeMode = React.useCallback(() => {
+    setGlobeMode((isGlobeMode) => {
+      if (isGlobeMode) {
+        const center = globeRef.current?.getCenterLatLng()
+        console.log('map mode', center)
+
+        if (center) {
+          setCenter(center)
+        }
+      }
+
+      return !isGlobeMode
+    })
+  }, [setGlobeMode, setCenter])
 
   return {
     users,
@@ -40,7 +62,10 @@ function useGlobe() {
     setFilterPublicOnly,
 
     isGlobeMode,
-    setGlobeMode,
+    onToggleGlobeMode,
+
+    center,
+    setCenter,
 
     globeRef,
 

@@ -64,7 +64,7 @@ export class ThreeGlobe {
     this._mouse = { x: 0, y: 0 }
     this._mouseOnDown = { x: 0, y: 0 }
     this._rotation = { x: 0, y: 0 }
-    this._target = { x: (Math.PI * 3) / 2.2, y: Math.PI / 3.0 }
+    this._target = { x: (Math.PI * 3) / 2.05, y: Math.PI / 3.3 }
     this._targetOnDown = { x: 0, y: 0 }
 
     this._camera = new THREE.PerspectiveCamera(30, width / height, 1, 10000)
@@ -439,6 +439,17 @@ export class ThreeGlobe {
       (this._mouse.y - this._mouseOnDown.y) * 0.005 * zoomDamp
 
     this._target.y = Math.max(0, Math.min(Math.PI, this._target.y))
+  }
+
+  getCenterLatLng() {
+    this._raycaster.setFromCamera(new THREE.Vector2(0, 0), this._camera)
+    const intersects = this._raycaster.intersectObject(this._globeMesh, true)
+    const pt = intersects[0].point
+
+    const lat = 90 - (Math.acos(pt.y / this._radius) * 180) / Math.PI
+    const lng = ((270 + (Math.atan2(pt.x, pt.z) * 180) / Math.PI) % 360) - 180
+
+    return { lat, lng }
   }
 
   onMouseUp(event) {

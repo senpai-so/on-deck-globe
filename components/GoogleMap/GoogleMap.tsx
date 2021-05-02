@@ -9,40 +9,29 @@ import { mapStyles } from './map-styles'
 
 const googleMapOptions = {
   styles: mapStyles,
-  minZoom: 8,
+  minZoom: 6,
   fullscreenControl: false
 }
 
 const googleMapsKey = { key: googleMapsApiKey }
-
-const defaultCenter = {
-  lng: -74.016915901860472,
-  lat: 40.69555921429896
-}
 
 export const GoogleMap: React.FC = () => {
   const {
     users,
     focusedUser,
     setFocusedUser,
-    isGlobeMode
+    isGlobeMode,
+    center,
+    setCenter
   } = Globe.useContainer()
-  const [center, setCenter] = React.useState(
-    focusedUser
-      ? {
-          lat: focusedUser.lat,
-          lng: focusedUser.lng
-        }
-      : defaultCenter
-  )
   const [bounds, setBounds] = React.useState({
-    nw: { lat: -90, lng: -180 },
-    ne: { lat: 90, lng: -180 },
-    se: { lat: 90, lng: 180 },
-    sw: { lat: -90, lng: 180 }
+    nw: { lat: 90, lng: -180 },
+    ne: { lat: 90, lng: 180 },
+    se: { lat: -90, lng: 180 },
+    sw: { lat: -90, lng: -180 }
   })
 
-  const [zoom, setZoom] = React.useState(12)
+  const [zoom, setZoom] = React.useState(10)
 
   const onChildClick = React.useCallback(
     (event, child) => {

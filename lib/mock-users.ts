@@ -4,8 +4,8 @@ const users: User[] = [
   {
     userId: '4391',
     isPublic: true,
-    lng: -74.016915901860472,
-    lat: 40.69555921429896,
+    lng: -73.99004,
+    lat: 40.69082,
     fellow: {
       isMe: true,
       id: '4391',

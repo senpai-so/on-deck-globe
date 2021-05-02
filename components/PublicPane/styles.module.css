@@ -1,6 +1,9 @@
 .container {
   position: absolute;
-  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
   left: 20px;
 }
 

@@ -11,11 +11,7 @@ import { Paper } from '../Paper/Paper'
 import styles from './styles.module.css'
 
 export const MapToggleControls = () => {
-  const { isGlobeMode, setGlobeMode } = Globe.useContainer()
-
-  const onClickToggleGlobeMode = React.useCallback(() => {
-    setGlobeMode((isGlobeMode) => !isGlobeMode)
-  }, [setGlobeMode])
+  const { isGlobeMode, onToggleGlobeMode } = Globe.useContainer()
 
   const filterLabel = isGlobeMode ? 'View Google Map' : 'View Globe'
 
@@ -26,7 +22,7 @@ export const MapToggleControls = () => {
           <button
             aria-label={filterLabel}
             className={cs(styles.control)}
-            onClick={onClickToggleGlobeMode}
+            onClick={onToggleGlobeMode}
           >
             {isGlobeMode ? <FiMap /> : <FaGlobeAmericas />}
           </button>

@@ -16,6 +16,14 @@ export const mapStyles = [
     stylers: [{ visibility: 'off' }]
   },
   {
+    featureType: 'landscape.man_made',
+    stylers: [{ visibility: 'off' }]
+  },
+  {
+    featureType: 'landscape.natural.terrain',
+    stylers: [{ visibility: 'off' }]
+  },
+  {
     featureType: 'road',
     elementType: 'geometry',
     stylers: [{ color: '#38414e' }]
@@ -27,8 +35,9 @@ export const mapStyles = [
   },
   {
     featureType: 'road',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9ca5b3' }]
+    elementType: 'labels',
+    // stylers: [{ color: '#9ca5b3' }]
+    stylers: [{ visibility: 'off' }]
   },
   {
     featureType: 'road.highway',
@@ -42,8 +51,8 @@ export const mapStyles = [
   },
   {
     featureType: 'road.highway',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#f3d19c' }]
+    elementType: 'labels',
+    stylers: [{ visibility: 'off' }]
   },
   {
     featureType: 'water',
