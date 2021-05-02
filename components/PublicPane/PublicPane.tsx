@@ -5,6 +5,7 @@ import { useLocalStorage } from 'react-use'
 import { Tooltip } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
 
+import { signupLink } from 'lib/config'
 import { Button } from '../Button/Button'
 import { Paper } from '../Paper/Paper'
 
@@ -19,9 +20,6 @@ export const PublicPane = () => {
   const onClickClose = React.useCallback(() => {
     setIsVisible(false)
   }, [setIsVisible])
-
-  const tweetLink =
-    'https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw&screen_name=ondeckglobe&text=%23MakeMePublic%20%F0%9F%93%A3%20I%20am%20going%20public%20on%20OnDeckGlobe.com%20with%20the%20On%20Deck%20Fellows.%20Join%20us%20on%20the%20globe!%20%20%23ondeck%20%23odf9%20%F0%9F%9A%80%F0%9F%9A%80%F0%9F%9A%80&tw_p=tweetbutton'
 
   if (!isVisible) {
     return null
@@ -50,7 +48,7 @@ export const PublicPane = () => {
         </p>
 
         <div>
-          <Button href={tweetLink} target='_blank' rel='noreferrer noopener'>
+          <Button href={signupLink} target='_blank' rel='noreferrer noopener'>
             Make me public
           </Button>
         </div>

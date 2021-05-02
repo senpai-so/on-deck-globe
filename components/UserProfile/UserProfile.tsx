@@ -2,7 +2,10 @@ import React from 'react'
 
 import { FaTwitter, FaLinkedin } from 'react-icons/fa'
 
+import { signupLink } from 'lib/config'
 import { User } from 'lib/types'
+
+import { Paper } from '../Paper/Paper'
 import { Button } from '../Button/Button'
 import styles from './styles.module.css'
 
@@ -13,84 +16,88 @@ export const UserProfile = ({ user }: { user: User }) => {
 
   return (
     <div className={styles.container}>
-      {userData && (
-        <React.Fragment>
-          {userData.twitterId ? (
-            <a
-              className={styles.profileImages}
-              href={`https://twitter.com/${userData.twitterId}`}
-              title={`Twitter @${userData.twitterId}`}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <img src={userData.imageUrl} />
-            </a>
-          ) : (
-            userData.imageUrl && (
-              <div className={styles.profileImages}>
-                <img src={userData.imageUrl} />
-              </div>
-            )
-          )}
-
-          {userData.twitterId ? (
-            <div>
+      <Paper className={styles.content}>
+        {userData ? (
+          <React.Fragment>
+            {userData.twitterId ? (
               <a
+                className={styles.profileImages}
                 href={`https://twitter.com/${userData.twitterId}`}
                 title={`Twitter @${userData.twitterId}`}
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                <h3>{userData.name}</h3>
+                <img src={userData.imageUrl} />
               </a>
-            </div>
-          ) : (
-            <h3>{userData.name}</h3>
-          )}
+            ) : (
+              userData.imageUrl && (
+                <div className={styles.profileImages}>
+                  <img src={userData.imageUrl} />
+                </div>
+              )
+            )}
 
-          {(userData.twitterId || (userData as any).linkedinId) && (
-            <div className={styles.social}>
-              {userData.twitterId && (
+            {userData.twitterId ? (
+              <div>
                 <a
-                  className={styles.twitter}
                   href={`https://twitter.com/${userData.twitterId}`}
                   title={`Twitter @${userData.twitterId}`}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <FaTwitter size={24} />
+                  <h3>{userData.name}</h3>
                 </a>
-              )}
+              </div>
+            ) : (
+              <h3>{userData.name}</h3>
+            )}
 
-              {userData.linkedinId && (
-                <a
-                  className={styles.linkedin}
-                  href={`https://linkedin.com/in/${userData.linkedinId}`}
-                  title={`LinkedIn ${userData.name || userData.linkedinId}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  <FaLinkedin size={24} />
-                </a>
-              )}
-            </div>
-          )}
-        </React.Fragment>
-      )}
+            {(userData.twitterId || (userData as any).linkedinId) && (
+              <div className={styles.social}>
+                {userData.twitterId && (
+                  <a
+                    className={styles.twitter}
+                    href={`https://twitter.com/${userData.twitterId}`}
+                    title={`Twitter @${userData.twitterId}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaTwitter size={24} />
+                  </a>
+                )}
 
-      {!userData && (
-        <div className={styles.notPublic}>
-          This On Deck Fellow is not public yet.
-        </div>
-      )}
+                {userData.linkedinId && (
+                  <a
+                    className={styles.linkedin}
+                    href={`https://linkedin.com/in/${userData.linkedinId}`}
+                    title={`LinkedIn ${userData.name || userData.linkedinId}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <FaLinkedin size={24} />
+                  </a>
+                )}
+              </div>
+            )}
 
-      <Button
-        href={`https://community.beondeck.com/user/${user.userId}`}
-        target='_blank'
-        rel='noreferrer noopener'
-      >
-        View On Deck Profile
-      </Button>
+            <Button
+              href={`https://community.beondeck.com/user/${user.userId}`}
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              View On Deck Profile
+            </Button>
+          </React.Fragment>
+        ) : (
+          <div className={styles.notPublic}>
+            This On Deck Fellow is private. If this is you, you can{' '}
+            <a href={signupLink} target='_blank' rel='noreferrer noopener'>
+              make your profile public here
+            </a>
+            .
+          </div>
+        )}
+      </Paper>
     </div>
   )
 }

@@ -22,6 +22,9 @@ export const fathomConfig = fathomId
 
 export const imageCDNHost = 'https://ssfy.io'
 
+export const signupLink =
+  'https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw&screen_name=ondeckglobe&text=%23MakeMePublic%20%F0%9F%93%A3%20I%20am%20going%20public%20on%20OnDeckGlobe.com%20with%20the%20On%20Deck%20Fellows.%20Join%20us%20on%20the%20globe!%20%20%23ondeck%20%23odf9%20%F0%9F%9A%80%F0%9F%9A%80%F0%9F%9A%80&tw_p=tweetbutton'
+
 // ----------------------------------------------------------------------------
 
 export function getEnv(

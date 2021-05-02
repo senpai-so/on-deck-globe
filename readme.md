@@ -9,19 +9,20 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
 ## MVP TODO
 
 - [x] basic globe viz
-- [ ] foreground layer
-  - [ ] search / filtering users
+- [x] foreground layer
+  - [x] search / filtering users
     - laszlo
   - [ ] info box
   - [x] zoom controls
 - [x] clickable users
-- [ ] focused user pane
+- [x] focused user pane
 - [ ] poll data to update opt-ins in real-time
 - [x] populate initial db (travis, kevin)
   - id, lat/lng, twitter
-- [ ] twitter opt-in => update db (kevin)
-- [ ] recommended users data (kevin)
+- [x] twitter opt-in => update db (kevin)
+- [x] recommended users data (kevin)
 - [ ] recommended users viz (travis)
+- [ ]
 - [x] add header nav
 - [x] add footer nav
 - [x] about page
