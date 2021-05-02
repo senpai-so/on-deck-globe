@@ -22,7 +22,7 @@ This webapp is built using [Next.js](https://nextjs.org) deployed to [Vercel](ht
 - [x] twitter opt-in => update db (kevin)
 - [x] recommended users data (kevin)
 - [ ] recommended users viz (travis)
-- [ ]
+- [x] 2d view
 - [x] add header nav
 - [x] add footer nav
 - [x] about page
