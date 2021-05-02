@@ -1,9 +1,10 @@
 import React from 'react'
 
 import { Globe } from 'state/globe'
+import { User } from 'lib/types'
+
 import UserSearchCombo from './UserSearchCombo'
 import styles from './styles.module.css'
-import { User } from 'lib/types'
 
 /**
  * Search component for filtering the Users by Name.
@@ -11,6 +12,11 @@ import { User } from 'lib/types'
  */
 export const UserSearch = () => {
   const { users, setFocusedUser } = Globe.useContainer()
+  const [hasMounted, setHasMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   const onUserSelection = React.useCallback(
     (event: React.ChangeEvent, user: User) => {
@@ -21,6 +27,10 @@ export const UserSearch = () => {
     },
     [setFocusedUser]
   )
+
+  if (!hasMounted) {
+    return null
+  }
 
   return (
     <div className={styles.search}>

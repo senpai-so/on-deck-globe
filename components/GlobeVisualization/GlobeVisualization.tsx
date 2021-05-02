@@ -66,8 +66,9 @@ export const GlobeVisualization: React.FC = () => {
   const onMouseMove = React.useCallback(
     (event) => {
       globeRef.current?.onMouseMove(event)
+      canvasRef.current?.focus()
     },
-    [globeRef]
+    [globeRef, canvasRef]
   )
 
   const onMouseOut = React.useCallback(() => {
@@ -112,6 +113,7 @@ export const GlobeVisualization: React.FC = () => {
         width={width}
         height={height}
         ref={canvasRef}
+        tabIndex={-1}
         onMouseDownCapture={onMouseDown}
         onMouseUpCapture={onMouseUp}
         onMouseOutCapture={onMouseOut}
